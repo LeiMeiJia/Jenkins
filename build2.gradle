@@ -58,7 +58,20 @@ def getJenkinsBuildCode() {
  * 获取Git 分支名
  */
 def getGitBranch() {
-    return 'git symbolic-ref --short -q HEAD'.execute().text.trim()
+    //判断是否处于Jenkins编译环境
+    boolean flag = isInJenkins()
+    if (flag) {
+        ext.env = System.getenv()
+        ext.gitBranch = env.GIT_BRANCH
+        String[] stringArray = ext.gitBranch.split("/")
+        if (stringArray.length > 0) {
+            return stringArray[stringArray.length - 1]
+        } else {
+            return "UnKnown Branch"
+        }
+    } else {
+        return 'git symbolic-ref --short -q HEAD'.execute().text.trim()
+    }
 }
 
 /**
