@@ -1,0 +1,119 @@
+/**
+ * 判断是否有jenkins
+ */
+boolean isInJenkins() {
+    Map<String, String> map = System.getenv()
+    if (map == null) {
+        return false
+    }
+    String str = map.get("Path")
+    if (str != null) {
+        //it's windows
+        return false
+    } else {
+        str = ""
+        Iterator it = map.iterator()
+        while (it.hasNext()) {
+            str += it.next()
+        }
+        return str.contains("jenkins")
+    }
+}
+
+/**
+ * 获取jenkins任务名
+ */
+def getJenkinsName() {
+    boolean flag = isInJenkins()
+    if (flag) {
+        ext.env = System.getenv()
+        ext.name = env.JOB_URL
+        String[] stringArray = ext.name.split("/")
+        if (stringArray.length > 0) {
+            return stringArray[stringArray.length - 1]
+        } else {
+            return "Local"
+        }
+    } else {
+        return "Local"
+    }
+}
+
+/**
+ * 获取Jenkins Build 号
+ * @return
+ */
+def getJenkinsBuildCode() {
+    boolean flag = isInJenkins()
+    if (flag) {
+        ext.env = System.getenv()
+        ext.buildNumber = env.BUILD_NUMBER?.toInteger()
+        return "$buildNumber"
+    } else {
+        return 0
+    }
+}
+
+/**
+ * 获取Git 分支名
+ */
+def getGitBranch() {
+    return 'git symbolic-ref --short -q HEAD'.execute().text.trim()
+}
+
+/**
+ * 获取Git 版本号
+ */
+def getGitSHA() {
+    return 'git rev-parse --short HEAD'.execute().text.trim()
+}
+
+/**
+ * 获取Git Tag
+ */
+def getGitTag() {
+    return 'git describe --tags'.execute([], project.rootDir).text.trim()
+}
+
+/**
+ * 获取Git 提交次数
+ */
+def getGitCommitCount() {
+    return 'git rev-list --count HEAD'.execute([], project.rootDir).text.trim()
+}
+
+
+def getServerUrl() {
+    String url  = System.getenv("server_url")
+    if (url != null) {
+        return url
+    } else {
+        return "127.0.0.1"
+    }
+}
+
+/**
+ * 定义几个变量，在build.gradle里面引用
+ */
+ext {
+    isJenkins = isInJenkins()
+    jenkinsRevision = getJenkinsBuildCode()
+    jenkinsName = getJenkinsName()
+    gitBranch = getGitBranch()
+    gitSHA = getGitSHA()
+    gitTag = getGitTag()
+    gitCommitCount = getGitCommitCount()
+    server_url = getServerUrl()
+}
+
+
+
+println '***************打印配置项**************'
+println "#判断是否有jenkins is ${isJenkins}"
+println "#获取jenkins任务名 is ${jenkinsName}"
+println "#获取Jenkins Build 号 is ${jenkinsRevision}"
+println "#获取Git 分支名 is ${gitBranch}"
+println "#获取Git 版本号 is ${gitSHA}"
+println "#获取Git Tag is ${gitTag}"
+println "#获取Git 提交次数 is ${gitCommitCount}"
+println "#server_url is ${server_url}"
