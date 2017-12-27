@@ -7,16 +7,12 @@ boolean isInJenkins() {
         return false
     }
     String str = map.get("Path")
-    if (str != null) {
+    println "#str is " + str
+    if ((str != null) && str.contains("jenkins")) {
         //it's windows
-        return false
+        return true
     } else {
-        str = ""
-        Iterator it = map.iterator()
-        while (it.hasNext()) {
-            str += it.next()
-        }
-        return str.contains("jenkins")
+        return false
     }
 }
 
@@ -26,7 +22,7 @@ boolean isInJenkins() {
 def getJenkinsName() {
     boolean flag = isInJenkins()
     if (flag) {
-        ext.env = System.getenv()
+        ext.env  = System.getenv()
         ext.name = env.JOB_URL
         String[] stringArray = ext.name.split("/")
         if (stringArray.length > 0) {
@@ -97,7 +93,7 @@ def getGitCommitCount() {
 
 
 def getServerUrl() {
-    String url  = System.getenv("server_url")
+    String url = System.getenv("server_url")
     if (url != null) {
         return url
     } else {
