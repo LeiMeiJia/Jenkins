@@ -1,15 +1,14 @@
 /**
- * 判断是否有jenkins
+ * 判断是否有jenkins环境
  */
-boolean isInJenkins() {
+boolean isInJenkinsPath() {
     Map<String, String> map = System.getenv()
     if (map == null) {
         return false
     }
+    //it's windows
     String str = map.get("Path")
-    println "#str is " + str
     if ((str != null) && str.contains("jenkins")) {
-        //it's windows
         return true
     } else {
         return false
@@ -20,13 +19,12 @@ boolean isInJenkins() {
  * 获取jenkins任务名
  */
 def getJenkinsName() {
-    IS_JENKINS = !(BRANCH_NAME == null || "".equals(BRANCH_NAME));
-
+    def var1 = System.getenv("JOB_NAME")
+    return var1
 }
 
 /**
  * 获取Jenkins Build 号
- * @return
  */
 def getJenkinsBuildCode() {
     def var1 = System.getenv("BUILD_NUMBER")
@@ -34,7 +32,7 @@ def getJenkinsBuildCode() {
 }
 
 /**
- * 获取Git 分支名
+ * 获取Jenkins Git分支名
  */
 def getGitBranch() {
     def var1 = System.getenv("GIT_BRANCH")
@@ -62,38 +60,26 @@ def getGitCommitCount() {
     return 'git rev-list --count HEAD'.execute([], project.rootDir).text.trim()
 }
 
-
-def getServerUrl() {
-    String url = System.getenv("server_url")
-    if (url != null) {
-        return url
-    } else {
-        return "127.0.0.1"
-    }
-}
-
 /**
  * 定义几个变量，在build.gradle里面引用
  */
 ext {
-    isJenkins = isInJenkins()
-    jenkinsRevision = getJenkinsBuildCode()
-//    jenkinsName = getJenkinsName()
     gitBranch = getGitBranch()
+    isJenkins = !(gitBranch == null || "".equals(gitBranch));
+    isJenkinsPath = isInJenkinsPath()
+    jenkinsRevision = getJenkinsBuildCode()
+    jenkinsName = getJenkinsName()
     gitSHA = getGitSHA()
     gitTag = getGitTag()
     gitCommitCount = getGitCommitCount()
-    server_url = getServerUrl()
 }
 
-
-
 println '***************打印配置项**************'
-println "#判断是否有jenkins is ${isJenkins}"
-//println "#获取jenkins任务名 is ${jenkinsName}"
+println "#判断是否有jenkins环境 is ${isJenkinsPath}"
+println "#判断处于jenkins打包 is ${isJenkins}"
+println "#获取jenkins任务名 is ${jenkinsName}"
 println "#获取Jenkins Build 号 is ${jenkinsRevision}"
-println "#获取Git 分支名 is ${gitBranch}"
+println "#获取Jenkins Git分支 is ${gitBranch}"
 println "#获取Git 版本号 is ${gitSHA}"
 println "#获取Git Tag is ${gitTag}"
 println "#获取Git 提交次数 is ${gitCommitCount}"
-println "#server_url is ${server_url}"

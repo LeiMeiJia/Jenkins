@@ -13,14 +13,14 @@ android {
     }
     buildTypes {
         release {
-            buildConfigField 'String', 'SERVER_URL', "\"${server_url}\";"
+//            buildConfigField 'String', 'SERVER_URL', "\"${server_url}\";"
             minifyEnabled true
             zipAlignEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
-            buildConfigField 'String', 'SERVER_URL', "\"${server_url}\";"
+//            buildConfigField 'String', 'SERVER_URL', "\"${server_url}\";"
         }
 
     }
