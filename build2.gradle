@@ -20,6 +20,8 @@ boolean isInJenkins() {
  * 获取jenkins任务名
  */
 def getJenkinsName() {
+    IS_JENKINS = !(BRANCH_NAME == null || "".equals(BRANCH_NAME));
+
 }
 
 /**
