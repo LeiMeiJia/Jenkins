@@ -12,24 +12,24 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
+
         release {
-            if (isJenkins) {
-                buildConfigField 'String', 'SERVER_URL', "\"${serverUrl}\";"
-            } else {
-                buildConfigField 'String', 'SERVER_URL', "\"http://10.30.50.152:8071/qingqinew\";"
-            }
+            buildConfigField 'String', 'SERVER_URL', "\"http://jfx.qdfaw.com:8081/api\";"
             minifyEnabled true
             zipAlignEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
-            if (isJenkins) {
+            buildConfigField 'String', 'SERVER_URL', "\"http://59.46.97.115:8071/qingqinew\";"
+        }
+
+        if (isJenkins) {
+            jenkins {
                 buildConfigField 'String', 'SERVER_URL', "\"${serverUrl}\";"
-            } else {
-                buildConfigField 'String', 'SERVER_URL', "\"http://127.0.0.1\";"
             }
         }
+
 
     }
 }

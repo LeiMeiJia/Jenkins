@@ -70,6 +70,15 @@ def getServerUrl() {
 }
 
 /**
+ * 获取编译类型
+ * @return
+ */
+def getBuildType() {
+    def var = System.getenv("BUILD_TYPE")
+    return var
+}
+
+/**
  * 定义几个变量，在build.gradle里面引用
  */
 ext {
@@ -82,6 +91,7 @@ ext {
     gitTag = getGitTag()
     gitCommitCount = getGitCommitCount()
     serverUrl = getServerUrl()
+    buildType = getBuildType()
 }
 
 println '***************打印配置项**************'
@@ -94,4 +104,5 @@ println "#获取Git 版本号 is ${gitSHA}"
 println "#获取Git Tag is ${gitTag}"
 println "#获取Git 提交次数 is ${gitCommitCount}"
 println "#获取Jenkins上配置的服务器地址 is ${serverUrl}"
+println "#获取buildType类型 is ${buildType}"
 println '***************打印配置项**************'
