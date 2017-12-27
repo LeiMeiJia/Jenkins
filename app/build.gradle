@@ -13,14 +13,22 @@ android {
     }
     buildTypes {
         release {
-//            buildConfigField 'String', 'SERVER_URL', "\"${server_url}\";"
+            if (isJenkins) {
+                buildConfigField 'String', 'SERVER_URL', "\"${server_url}\";"
+            } else {
+                buildConfigField 'String', 'SERVER_URL', "\"http://10.30.50.152:8071/qingqinew\";"
+            }
             minifyEnabled true
             zipAlignEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
-//            buildConfigField 'String', 'SERVER_URL', "\"${server_url}\";"
+            if (isJenkins) {
+                buildConfigField 'String', 'SERVER_URL', "\"${server_url}\";"
+            } else {
+                buildConfigField 'String', 'SERVER_URL', "\"http://127.0.0.1\";"
+            }
         }
 
     }
