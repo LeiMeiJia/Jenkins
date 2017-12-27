@@ -20,19 +20,6 @@ boolean isInJenkins() {
  * 获取jenkins任务名
  */
 def getJenkinsName() {
-    boolean flag = isInJenkins()
-    if (flag) {
-        ext.env  = System.getenv()
-        ext.name = env.JOB_URL
-        String[] stringArray = ext.name.split("/")
-        if (stringArray.length > 0) {
-            return stringArray[stringArray.length - 1]
-        } else {
-            return "Local"
-        }
-    } else {
-        return "Local"
-    }
 }
 
 /**
@@ -40,34 +27,16 @@ def getJenkinsName() {
  * @return
  */
 def getJenkinsBuildCode() {
-    boolean flag = isInJenkins()
-    if (flag) {
-        ext.env = System.getenv()
-        ext.buildNumber = env.BUILD_NUMBER?.toInteger()
-        return "$buildNumber"
-    } else {
-        return 0
-    }
+    def var1 = System.getenv("BUILD_NUMBER")
+    return var1
 }
 
 /**
  * 获取Git 分支名
  */
 def getGitBranch() {
-    //判断是否处于Jenkins编译环境
-    boolean flag = isInJenkins()
-    if (flag) {
-        ext.env = System.getenv()
-        ext.gitBranch = env.GIT_BRANCH
-        String[] stringArray = ext.gitBranch.split("/")
-        if (stringArray.length > 0) {
-            return stringArray[stringArray.length - 1]
-        } else {
-            return "UnKnown Branch"
-        }
-    } else {
-        return 'git symbolic-ref --short -q HEAD'.execute().text.trim()
-    }
+    def var1 = System.getenv("GIT_BRANCH")
+    return var1
 }
 
 /**
@@ -107,7 +76,7 @@ def getServerUrl() {
 ext {
     isJenkins = isInJenkins()
     jenkinsRevision = getJenkinsBuildCode()
-    jenkinsName = getJenkinsName()
+//    jenkinsName = getJenkinsName()
     gitBranch = getGitBranch()
     gitSHA = getGitSHA()
     gitTag = getGitTag()
@@ -119,7 +88,7 @@ ext {
 
 println '***************打印配置项**************'
 println "#判断是否有jenkins is ${isJenkins}"
-println "#获取jenkins任务名 is ${jenkinsName}"
+//println "#获取jenkins任务名 is ${jenkinsName}"
 println "#获取Jenkins Build 号 is ${jenkinsRevision}"
 println "#获取Git 分支名 is ${gitBranch}"
 println "#获取Git 版本号 is ${gitSHA}"
