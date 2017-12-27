@@ -83,3 +83,4 @@ println "#获取Jenkins Git分支 is ${gitBranch}"
 println "#获取Git 版本号 is ${gitSHA}"
 println "#获取Git Tag is ${gitTag}"
 println "#获取Git 提交次数 is ${gitCommitCount}"
+println '***************打印配置项**************'
