@@ -14,7 +14,7 @@ android {
     buildTypes {
         release {
             if (isJenkins) {
-                buildConfigField 'String', 'SERVER_URL', "\"${server_url}\";"
+                buildConfigField 'String', 'SERVER_URL', "\"${serverUrl}\";"
             } else {
                 buildConfigField 'String', 'SERVER_URL', "\"http://10.30.50.152:8071/qingqinew\";"
             }
@@ -25,7 +25,7 @@ android {
         }
         debug {
             if (isJenkins) {
-                buildConfigField 'String', 'SERVER_URL', "\"${server_url}\";"
+                buildConfigField 'String', 'SERVER_URL', "\"${serverUrl}\";"
             } else {
                 buildConfigField 'String', 'SERVER_URL', "\"http://127.0.0.1\";"
             }
