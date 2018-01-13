@@ -1,5 +1,10 @@
 apply plugin: 'com.android.application'
 
+//定义打包时间
+def releaseTime() {
+    return new Date().format("yyyy-MM-dd", TimeZone.getTimeZone("UTC"))
+}
+
 android {
     compileSdkVersion 23
     buildToolsVersion "26.0.0"
@@ -9,20 +14,96 @@ android {
         targetSdkVersion 21
         versionCode 1
         versionName "1.0"
+        // dex突破65535的限制
+        multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+    signingConfigs {
+        debug {
+            storeFile file("../debug.jks")
+            storePassword "123456"
+            keyAlias "test"
+            keyPassword "123456"
+        }
+        release {
+            storeFile file("../release.jks")
+            storePassword "123456"
+            keyAlias "product"
+            keyPassword "123456"
+        }
+    }
+
+    // 配置多渠道打包
+    productFlavors {
+        // 如果配置参数相同，优先取值buildTypes中的参数
+//        flavors {
+//            buildConfigField 'String', 'SERVER_URL', "\"http://jfx.qdfaw.com:8081/api/test\";"
+//        }
+    }
+
     buildTypes {
         release {
-            buildConfigField 'String', 'SERVER_URL', "\"${server_url}\";"
-            minifyEnabled true
-            zipAlignEnabled true
-            shrinkResources true
+            buildConfigField "boolean", "LOG_DEBUG", "true"           // 显示Log
+            minifyEnabled false                                          // 是否进行混淆
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-        debug {
-            buildConfigField 'String', 'SERVER_URL', "\"${server_url}\";"
+            shrinkResources false                                         // 移除无用的resource文件
+            zipAlignEnabled false                                        // Zipalign优化
+            debuggable true                                              // 开启调试
+            signingConfig signingConfigs.release
+//            applicationIdSuffix ".release"               //配置不同的applicationId
+            buildConfigField 'String', 'SERVER_URL', "\"http://jfx.qdfaw.com:8081/api\";"
         }
 
+        debug {
+            minifyEnabled false
+            zipAlignEnabled false
+            shrinkResources false
+            debuggable true
+            signingConfig signingConfigs.debug
+//            applicationIdSuffix ".debug"               //配置不同的applicationId
+            buildConfigField 'String', 'SERVER_URL', "\"http://59.46.97.115:8071/qingqinew\";"
+        }
+
+        if (isJenkins) {
+            jenkins {
+                signingConfig signingConfigs.debug
+//                applicationIdSuffix ".debug"               //配置不同的applicationId
+                buildConfigField 'String', 'SERVER_URL', "\"${serverUrl}\";"
+            }
+        }
+
+        // 配置打包名称
+        android.applicationVariants.all { variant ->
+            variant.outputs.each { output ->
+                def outputFile = output.outputFile
+                if (outputFile != null && outputFile.name.endsWith('.apk')) {
+                    def fileName = "Jenkins_v${defaultConfig.versionName}_${releaseTime()}_${variant.name}.apk"
+                    output.outputFile = new File(outputFile.parent, fileName)
+                }
+            }
+        }
+
+    }
+
+    // 移除lint检查的error
+    lintOptions {
+        abortOnError false
+    }
+
+    // 手动指明jnilib在
+    sourceSets {
+        main {
+            jniLibs.srcDir 'libs'
+        }
+        debug.setRoot('build-types/debug')  // 指定 debug 模式的路径，配置不同的文件
+        release.setRoot('build-types/release')
+    }
+
+    // 指定aar 路径
+    repositories {
+        flatDir {
+            dirs 'libs'
+        }
     }
 }
 
@@ -33,5 +114,6 @@ dependencies {
     })
     compile 'com.android.support:appcompat-v7:23.0.1'
     compile 'com.android.support:design:23.4.0'
+//    compile(name: 'common-1.0.13', ext: 'aar') //aar 引用
     testCompile 'junit:junit:4.12'
 }
