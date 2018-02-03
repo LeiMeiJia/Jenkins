@@ -15,6 +15,11 @@ buildscript {
 allprojects {
     repositories {
         jcenter()
+        // 添加远程工具类
+        maven {
+            url 'https://dl.bintray.com/chanba2010/common/'
+        }
+
     }
 }
 

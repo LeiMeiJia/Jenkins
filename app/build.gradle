@@ -33,10 +33,12 @@ android {
         }
     }
 
-    // 配置多渠道打包
+    // 配置多渠道打包，加载对应文件
     productFlavors {
         // 如果配置参数相同，优先取值buildTypes中的参数
 //        flavors {
+//            applicationId "com.aerozhonghuan.jenkins.flavors";
+//            signingConfig signingConfigs.myConfig
 //            buildConfigField 'String', 'SERVER_URL', "\"http://jfx.qdfaw.com:8081/api/test\";"
 //        }
     }
@@ -51,7 +53,7 @@ android {
             debuggable true                                              // 开启调试
             signingConfig signingConfigs.release
 //            applicationIdSuffix ".release"               //配置不同的applicationId
-            buildConfigField 'String', 'SERVER_URL', "\"http://jfx.qdfaw.com:8081/api\";"
+            buildConfigField 'String', 'SERVER_URL', "\"http://jfx.qdfaw.com:8081\";"
         }
 
         debug {
@@ -61,7 +63,7 @@ android {
             debuggable true
             signingConfig signingConfigs.debug
 //            applicationIdSuffix ".debug"               //配置不同的applicationId
-            buildConfigField 'String', 'SERVER_URL', "\"http://59.46.97.115:8071/qingqinew\";"
+            buildConfigField 'String', 'SERVER_URL', "\"http://59.46.97.115:8071\";"
         }
 
         if (isJenkins) {
@@ -116,4 +118,9 @@ dependencies {
     compile 'com.android.support:design:23.4.0'
 //    compile(name: 'common-1.0.13', ext: 'aar') //aar 引用
     testCompile 'junit:junit:4.12'
+    compile 'com.squareup.retrofit2:retrofit:2.3.0' // retrofit 网络框架
+    compile 'com.squareup.retrofit2:converter-gson:2.0.2' // retrofi与gson适配器
+    compile 'com.squareup.retrofit2:converter-scalars:2.1.0'  // retrofit适配器
+    compile 'com.squareup.okhttp3:logging-interceptor:3.8.0' // okhttp日志器
+    compile 'com.common:mytools:1.0.02'
 }
