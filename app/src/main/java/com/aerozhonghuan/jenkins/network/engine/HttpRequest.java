@@ -40,15 +40,15 @@ public class HttpRequest {
     private ApiResponse apiResponse;
 
     private HttpRequest() {
-        // 添加日志
+        // HttpLoggingInterceptor 是一个拦截器，用于输出网络请求和结果的 Log
         HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
         // 设置日志级别
         httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         //手动创建一个OkHttpClient并设置超时时间
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
                 .addInterceptor(httpLoggingInterceptor)
-//                .retryOnConnectionFailure(false) // 禁止重试
-//                .addInterceptor(new LoggingInterceptor()) //  设置重试
+//                .retryOnConnectionFailure(false) // 禁止重试，方法为设置出现错误进行重新连接。
+                .addNetworkInterceptor(new NetworkInterceptor()) //  让所有网络请求都附上你的拦截器。设置重试
                 .readTimeout(15, TimeUnit.SECONDS)
                 .connectTimeout(15, TimeUnit.SECONDS)
                 .writeTimeout(15, TimeUnit.SECONDS)
@@ -65,7 +65,7 @@ public class HttpRequest {
         LogUtils.logd(TAG, LogUtils.getThreadName() + "handler:" + handler.getLooper().getThread().getName());
     }
 
-    public static HttpRequest getInstance() {
+    public static synchronized HttpRequest getInstance() {
         if (httpRequest == null) {
             httpRequest = new HttpRequest();
         }
@@ -123,25 +123,6 @@ public class HttpRequest {
                 LogUtils.logd(TAG, LogUtils.getThreadName() + "isCanceled:" + call.isCanceled());
             }
         });
-    }
-
-    class LoggingInterceptor implements Interceptor {
-
-        public int maxRetry = 1;//最大重试次数
-        private int retryNum = 0;//假如设置为3次重试的话，则最大可能请求4次（默认1次+3次重试）
-
-        @Override
-        public okhttp3.Response intercept(Interceptor.Chain chain) throws IOException {
-            Request request = chain.request();
-            Log.d(TAG, "retryNum=" + retryNum);
-            okhttp3.Response response = chain.proceed(request);
-            while (!response.isSuccessful() && retryNum < maxRetry) {
-                retryNum++;
-                Log.d(TAG, "retryNum=" + retryNum);
-                response = chain.proceed(request);
-            }
-            return response;
-        }
     }
 
 }

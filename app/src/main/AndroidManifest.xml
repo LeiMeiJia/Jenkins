@@ -20,6 +20,13 @@
             </intent-filter>
         </activity>
         <activity android:name=".test.TestActivity" />
+        <activity android:name=".rxjava.RxJavaActivity" />
+
+        <activity
+            android:launchMode="singleTask"
+            android:name=".Test1Activity" />
+        <activity android:name=".Test2Activity" />
+        <activity android:name=".Test3Activity" />
     </application>
 
 </manifest>

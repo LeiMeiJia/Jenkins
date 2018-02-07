@@ -26,6 +26,10 @@ public abstract class BasePresenterImpl<T> implements BasePresenter, HttpResult<
 
     // 发送请求
     protected void sendHttpRequest(Call<ResponseBody> call, Type typeToken) {
+        LogUtils.logd(TAG, LogUtils.getThreadName() + "this:" + this);
+        LogUtils.logd(TAG, LogUtils.getThreadName() + "httpRequest:" + httpRequest);
+        LogUtils.logd(TAG, LogUtils.getThreadName() + "httpParameters:" + httpParameters);
+        LogUtils.logd(TAG, LogUtils.getThreadName() + "httpApi:" + httpApi);
         // 每个Call实例可以且只能执行一次请求，不能使用相同的对象再次执行execute()或enqueue()。
         httpRequest.setHttpRequest(call, typeToken, this);
     }

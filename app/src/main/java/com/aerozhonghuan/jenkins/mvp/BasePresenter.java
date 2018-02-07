@@ -13,4 +13,8 @@ public interface BasePresenter {
         void login(String username, String password, String deviceId, String type);
     }
 
+    interface CarListPresenter extends BasePresenter {
+        void carList(String token, int page_size, int page_number, String processCode);
+    }
+
 }

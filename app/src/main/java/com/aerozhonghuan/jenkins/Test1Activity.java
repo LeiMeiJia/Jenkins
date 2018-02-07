@@ -8,17 +8,17 @@ import android.view.View;
 
 import com.aerozhonghuan.jenkins.test.TestActivity;
 
-public class MainActivity extends AppCompatActivity {
+public class Test1Activity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        Log.d("Test", "ip:" + BuildConfig.SERVER_URL);
+        setContentView(R.layout.activity_test1);
+        Log.d("Test", "test1:" + this);
         findViewById(R.id.btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, Test1Activity.class);
+                Intent intent = new Intent(Test1Activity.this, Test2Activity.class);
                 startActivity(intent);
             }
         });

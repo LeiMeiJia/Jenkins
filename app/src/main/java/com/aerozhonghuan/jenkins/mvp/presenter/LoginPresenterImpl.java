@@ -7,6 +7,7 @@ import com.aerozhonghuan.jenkins.mvp.BasePresenterImpl;
 import com.aerozhonghuan.jenkins.mvp.BaseResult;
 import com.aerozhonghuan.jenkins.mvp.entity.UserInfo;
 import com.aerozhonghuan.jenkins.network.ApiResponse;
+import com.aerozhonghuan.mytools.utils.LogUtils;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
@@ -33,6 +34,7 @@ public class LoginPresenterImpl extends BasePresenterImpl<UserInfo> implements B
     // 处理网络层
     @Override
     public void login(String username, String password, String deviceId, String type) {
+        LogUtils.logd("BasePresenterImpl", LogUtils.getThreadName() + "this1:" + this);
         Call<ResponseBody> call;
         if ("GET".equals(type)) {
             // 创建参数
@@ -56,7 +58,7 @@ public class LoginPresenterImpl extends BasePresenterImpl<UserInfo> implements B
     // 当网络状态码为200时，业务层实现自己的回调方法
     @Override
     public void requestSuccess(ApiResponse<UserInfo> apiResponse) {
-        // 处理业务层
+        // 处理业务层，需注意内存对象的处理
         int resultCode = apiResponse.getResultCode();
         if (resultCode == 200) { // 业务层200
             result.onLoginSuccess(apiResponse.getData());

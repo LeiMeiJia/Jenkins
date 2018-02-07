@@ -1,6 +1,7 @@
 package com.aerozhonghuan.jenkins.mvp;
 
 
+import com.aerozhonghuan.jenkins.mvp.entity.CarPageListData;
 import com.aerozhonghuan.jenkins.mvp.entity.UserInfo;
 
 /**
@@ -14,5 +15,11 @@ public interface BaseResult {
         void onLoginSuccess(UserInfo userInfo);
 
         void onLoginFail(int resultCode, String errorMsg);
+    }
+
+    interface CarListResult {
+        void onCarListSuccess(CarPageListData carListInfo);
+
+        void onCarListFail(int resultCode, String errorMsg);
     }
 }
