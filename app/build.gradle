@@ -9,6 +9,7 @@ android {
     compileSdkVersion 23
     buildToolsVersion "26.0.0"
     defaultConfig {
+        // applicationId在安卓设备和商店中是作为应用的唯一标识
         applicationId "com.aerozhonghuan.jenkins"
         minSdkVersion 17
         targetSdkVersion 21

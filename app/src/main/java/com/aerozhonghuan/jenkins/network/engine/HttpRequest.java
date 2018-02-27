@@ -16,9 +16,7 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.concurrent.TimeUnit;
 
-import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
 import okhttp3.ResponseBody;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
@@ -60,8 +58,15 @@ public class HttpRequest {
                 .build();
         // 网络接口
         httpApi = retrofit.create(HttpApi.class);
+        // 判断当前线程是否是主线程
+        Looper looper = Looper.myLooper();
+        Looper mainLooper = Looper.getMainLooper();
+        LogUtils.logd(TAG, LogUtils.getThreadName() + "looper:" + looper);
+        LogUtils.logd(TAG, LogUtils.getThreadName() + "mainLooper:" + mainLooper);
+
         // 打印handler
-        Handler handler = new Handler(Looper.getMainLooper());
+//        Handler handler = new Handler(Looper.getMainLooper());
+        Handler handler = new Handler();
         LogUtils.logd(TAG, LogUtils.getThreadName() + "handler:" + handler.getLooper().getThread().getName());
     }
 
