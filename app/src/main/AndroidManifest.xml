@@ -22,10 +22,12 @@
         <activity android:name=".test.TestActivity" />
         <activity android:name=".rxjava.RxJavaActivity" />
 
-        <activity
-            android:name=".Test1Activity" />
+        <activity android:name=".Test1Activity" />
         <activity android:name=".Test2Activity" />
         <activity android:name=".Test3Activity" />
+        <activity android:name=".LocalBroadcastActivity" />
+
+        <service android:name=".service.MyService"/>
     </application>
 
 </manifest>
