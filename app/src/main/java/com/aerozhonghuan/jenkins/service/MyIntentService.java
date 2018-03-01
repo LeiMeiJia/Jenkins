@@ -65,7 +65,6 @@ public class MyIntentService extends IntentService {
             bundle.putString("test", "onHandleIntent");
             resultReceiver.send(0, bundle);
         }
-
     }
 
 }

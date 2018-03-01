@@ -25,26 +25,22 @@ public class TestServiceActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_test_service);
+//      LogUtils.logd(TAG, LogUtils.getThreadName() + ":" + Integer.toHexString(hashCode()));
 
-
-        //                LogUtils.logd(TAG, LogUtils.getThreadName() + ":" + Integer.toHexString(hashCode()));
-
-
+        // 创建HandlerThread对象
         HandlerThread myThread = new HandlerThread("HandlerThread");
         myThread.start();
-
-        LogUtils.logd(TAG, LogUtils.getThreadName() + ":" + (myThread.getLooper() == Looper.getMainLooper()));
-
+        // 创建子线程的handler对象
         childHandler = new Handler(myThread.getLooper()) {
             @Override
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
-//                LogUtils.logd(TAG, LogUtils.getThreadName() + ":" + childHandler.getLooper().getThread().getName());
                 LogUtils.logd(TAG, LogUtils.getThreadName() + ":" + msg.obj);
             }
         };
-        //
+
+        // 测试ResultReceiver传递数据
         testService();
 
         // 测试IntentService进行异步操作
@@ -66,20 +62,23 @@ public class TestServiceActivity extends AppCompatActivity {
         });
     }
 
-
     /**
      * 创建ResultReceiver对象时，只需要传入一个Handler。
+     * <p>
      * 当handler对象为空时，则直接在调用send方法的线程中执行onReceiveResult回调
-     * 当handler对象不为空，就是控制回调函数执行在创建Handler的线程。
+     * 例如：在Service的OnStartCommand方法中调用send方法，onReceiveResult回调执行在主线程中
+     * main-> onReceiveResult()
+     * 在IntentService的onHandleIntent方法中调用send方法，onReceiveResult回调执行在子线程中。
+     * IntentService[MyIntentService]-> onReceiveResult()
+     * <p>
+     * 当handler对象不为空，onReceiveResult回调执行在创建Handler的线程。
      */
     private void testService() {
         ResultReceiver resultReceiver = new ResultReceiver(childHandler) {
             @Override
             protected void onReceiveResult(int resultCode, Bundle resultData) {
                 super.onReceiveResult(resultCode, resultData);
-//                 IntentService[MyIntentService]-> onReceiveResult()
-//                 main-> onReceiveResult()
-                // Toast的创建需要依赖Handler，存在handler的话，子线程也可以弹出toast
+                // 注意：Toast的创建需要依赖Handler，存在handler的话，子线程也可以弹出toast
                 ToastUtils.getToast(getApplication(), resultData.getString("test"));
                 LogUtils.logd(TAG, LogUtils.getThreadName());
             }
@@ -87,22 +86,19 @@ public class TestServiceActivity extends AppCompatActivity {
 
 //        Intent intent = new Intent(this, MyService.class);
         Intent intent = new Intent(this, MyIntentService.class);
+        // 注意：intent传递对象时，是将对象拷贝了一份进行传递，
         intent.putExtra("resultReceiver", resultReceiver);
         startService(intent);
     }
 
+    /**
+     * 主线程向子线程发送消息
+     */
     private void testHandler() {
-
-        findViewById(R.id.btn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-//                Message message = Message.obtain();
-//                message.obj = "主线程向子线程发消息";
-//                childHandler.sendMessage(message);
-            }
-        });
+        Message message = Message.obtain();
+        message.obj = "主线程向子线程发消息";
+        childHandler.sendMessage(message);
     }
-
 
     private class MyThread extends Thread {
         public Looper childLooper;

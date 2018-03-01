@@ -1,4 +1,4 @@
-package com.aerozhonghuan.jenkins;
+package com.aerozhonghuan.jenkins.receiver;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -9,7 +9,7 @@ import android.os.SystemClock;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 
-import com.aerozhonghuan.jenkins.mvp.entity.UserInfo;
+import com.aerozhonghuan.jenkins.R;
 import com.aerozhonghuan.mytools.utils.LogUtils;
 
 /**
@@ -33,23 +33,19 @@ public class LocalBroadcastActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        UserInfo userInfo = (UserInfo) getIntent().getSerializableExtra("test");
-        LogUtils.logd(TAG, LogUtils.getThreadName() + ":" + userInfo);
+        setContentView(R.layout.activity_test);
 
         // 创建本地广播
         localBroadcastManager = LocalBroadcastManager.getInstance(this);
-        LogUtils.logd(TAG, "LocalBroadcastManager:" + localBroadcastManager);
+
         // 在子线程发送广播
         new Thread(new Runnable() {
             @Override
             public void run() {
                 SystemClock.sleep(5000);
-                LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(LocalBroadcastActivity.this);
                 Intent intent = new Intent("test");
                 intent.putExtra("data", "子线程发过来的消息");
                 localBroadcastManager.sendBroadcast(intent);
-                LogUtils.logd(TAG, "LocalBroadcastManager:" + localBroadcastManager);
             }
         }).start();
 
