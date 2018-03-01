@@ -26,7 +26,9 @@
         <activity android:name=".Test2Activity" />
         <activity android:name=".Test3Activity" />
         <activity android:name=".LocalBroadcastActivity" />
+        <activity android:name=".service.TestServiceActivity" />
 
+        <service android:name=".service.MyIntentService"/>
         <service android:name=".service.MyService"/>
     </application>
 
