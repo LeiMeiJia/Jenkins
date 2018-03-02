@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
-import android.os.Looper;
 import android.os.Message;
 import android.os.ResultReceiver;
 import android.support.v7.app.AppCompatActivity;
@@ -89,27 +88,6 @@ public class TestServiceActivity extends AppCompatActivity {
         // 注意：intent传递对象时，是将对象拷贝了一份进行传递，
         intent.putExtra("resultReceiver", resultReceiver);
         startService(intent);
-    }
-
-    /**
-     * 主线程向子线程发送消息
-     */
-    private void testHandler() {
-        Message message = Message.obtain();
-        message.obj = "主线程向子线程发消息";
-        childHandler.sendMessage(message);
-    }
-
-    private class MyThread extends Thread {
-        public Looper childLooper;
-
-        @Override
-        public void run() {
-            super.run();
-            Looper.prepare();
-            childLooper = Looper.myLooper();
-            Looper.loop();
-        }
     }
 
 }
