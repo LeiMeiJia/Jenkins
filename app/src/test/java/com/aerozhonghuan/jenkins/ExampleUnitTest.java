@@ -1,5 +1,8 @@
 package com.aerozhonghuan.jenkins;
 
+import com.aerozhonghuan.jenkins.annotation.AdminDao;
+import com.aerozhonghuan.jenkins.annotation.AdminDaoImpl;
+import com.aerozhonghuan.jenkins.annotation.MyInvocationHandler;
 import com.aerozhonghuan.jenkins.annotation.User;
 import com.aerozhonghuan.jenkins.annotation.UserInject;
 
@@ -7,6 +10,7 @@ import org.junit.Test;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 
 import static org.junit.Assert.*;
 
@@ -53,4 +57,17 @@ public class ExampleUnitTest {
         System.out.println("result:" + result);
     }
 
+    @Test
+    public void testProxy() {
+        AdminDao adminDao1 = new AdminDaoImpl();
+        adminDao1.register();
+        adminDao1.login();
+        System.out.println("------------");
+
+        MyInvocationHandler my = new MyInvocationHandler(adminDao1);
+        AdminDao adminDao2 = (AdminDao) Proxy.newProxyInstance(adminDao1.getClass().getClassLoader(),
+                adminDao1.getClass().getInterfaces(), my);
+        adminDao2.register();
+        adminDao2.login();
+    }
 }
