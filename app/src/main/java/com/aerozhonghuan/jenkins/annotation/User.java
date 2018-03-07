@@ -12,7 +12,7 @@ public class User {
     private String name;
 
     private String eat(String eat) {
-        System.out.println("user:" + eat);
+        System.out.println("eat:" + eat);
         return eat + "真好吃";
     }
 
