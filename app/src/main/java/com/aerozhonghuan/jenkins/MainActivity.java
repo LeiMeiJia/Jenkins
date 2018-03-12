@@ -10,19 +10,31 @@ import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 
 import com.aerozhonghuan.jenkins.service.TestServiceActivity;
+import com.aerozhonghuan.jenkins.viewutils.OnClick;
+import com.aerozhonghuan.jenkins.viewutils.ViewInject;
+import com.aerozhonghuan.jenkins.viewutils.ViewUtilsDemo;
 import com.aerozhonghuan.mytools.utils.LogUtils;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
     private Handler childHandler;
 
+    @ViewInject(R.id.btn1)
+    private Button btn1;
+
+    @ViewInject(R.id.btn2)
+    private Button btn2;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Log.d("Test", "ip:" + BuildConfig.SERVER_URL);
+        ViewUtilsDemo.init(this);
         findViewById(R.id.btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -51,31 +63,28 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-        findViewById(R.id.btn1).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                LogUtils.logd(TAG, LogUtils.getThreadName());
-                // 主线程向子线程发送消息
-                Message message = Message.obtain();
-                message.obj = "主线程向子线程发消息1";
-                message.what = 1;
-                childHandler.sendMessage(message);
-            }
-        });
-
-        findViewById(R.id.btn2).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                LogUtils.logd(TAG, LogUtils.getThreadName());
-                // 主线程向子线程发送消息
-                Message message = Message.obtain();
-                message.obj = "主线程向子线程发消息2";
-                message.what = 2;
-                childHandler.sendMessage(message);
-            }
-        });
-
     }
+
+    @OnClick(R.id.btn1)
+    private void btn1(View view) {
+        LogUtils.logd(TAG, LogUtils.getThreadName() + btn1.getText());
+        // 主线程向子线程发送消息
+        Message message = Message.obtain();
+        message.obj = "主线程向子线程发消息1";
+        message.what = 1;
+        childHandler.sendMessage(message);
+    }
+
+    @OnClick(R.id.btn2)
+    private void btn2(View view) {
+        LogUtils.logd(TAG, LogUtils.getThreadName() + btn2.getText());
+        // 主线程向子线程发送消息
+        Message message = Message.obtain();
+        message.obj = "主线程向子线程发消息2";
+        message.what = 2;
+        childHandler.sendMessage(message);
+    }
+
 
     private class MyThread extends Thread {
         public Looper childLooper;
