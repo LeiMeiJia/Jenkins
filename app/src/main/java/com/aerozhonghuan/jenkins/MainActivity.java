@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.aerozhonghuan.jenkins.service.TestServiceActivity;
+import com.aerozhonghuan.jenkins.thread.HandlerThreadTest;
 import com.aerozhonghuan.jenkins.viewutils.OnClick;
 import com.aerozhonghuan.jenkins.viewutils.ViewInject;
 import com.aerozhonghuan.jenkins.viewutils.ViewUtilsDemo;
@@ -62,6 +63,28 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         };
+        test();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // 子线程使用Looper对象时，需考虑内存泄露问题
+
+        // Looper退出后，Looper对象是否还在，是否变为null；
+        // quitSafely和quit的区别
+        Looper looper = testHandler.getLooper();
+        LogUtils.logd(TAG, LogUtils.getThreadName() + "=====1111");
+        looper.quit();
+        LogUtils.logd(TAG, LogUtils.getThreadName() + "=====2222");
+        Looper looper1 = thread.getLooper();
+        LogUtils.logd(TAG, LogUtils.getThreadName() + "=====3333");
+        LogUtils.logd(TAG, LogUtils.getThreadName() + "thread:" + thread.quit());
+        LogUtils.logd(TAG, LogUtils.getThreadName() + "looper:" + (looper==null));
+        LogUtils.logd(TAG, LogUtils.getThreadName() + "looper1:" + (thread.getLooper()==null));
+        //
+        testHandler.removeCallbacksAndMessages(null);
+        testHandler = null;
 
     }
 
@@ -72,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
         Message message = Message.obtain();
         message.obj = "主线程向子线程发消息1";
         message.what = 1;
-        childHandler.sendMessage(message);
+        testHandler.sendMessage(message);
     }
 
     @OnClick(R.id.btn2)
@@ -86,21 +109,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private class MyThread extends Thread {
-        public Looper childLooper;
+    private Handler testHandler;
+    private HandlerThreadTest thread;
 
-        public MyThread(String threadName) {
-            super(threadName);
-        }
+    private void test() {
+         thread = new HandlerThreadTest();
+        thread.start();
 
-        @Override
-        public void run() {
-            super.run();
-            Looper.prepare();
-            childLooper = Looper.myLooper();
-            Looper.loop();
-        }
+        // 创建子线程的handler对象
+        testHandler = new Handler(thread.getLooper()) {
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                LogUtils.logd(TAG, LogUtils.getThreadName() + ":" + msg.obj);
+            }
+        };
     }
-
 
 }
