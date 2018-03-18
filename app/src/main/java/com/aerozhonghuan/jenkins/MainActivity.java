@@ -64,6 +64,9 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         test();
+        if (savedInstanceState != null) {
+            LogUtils.logd(TAG, LogUtils.getThreadName()+savedInstanceState.getString("data"));
+        }
     }
 
     @Override
@@ -126,4 +129,16 @@ public class MainActivity extends AppCompatActivity {
         };
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        LogUtils.logd(TAG, LogUtils.getThreadName());
+        outState.putString("data","test");
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        LogUtils.logd(TAG, LogUtils.getThreadName());
+    }
 }
