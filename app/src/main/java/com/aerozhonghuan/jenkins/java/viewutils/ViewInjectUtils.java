@@ -1,4 +1,4 @@
-package com.aerozhonghuan.jenkins.viewutils;
+package com.aerozhonghuan.jenkins.java.viewutils;
 
 import android.app.Activity;
 import android.view.View;
@@ -10,7 +10,7 @@ import java.lang.reflect.Method;
  * Created by liuk on 2018/3/11 0011.
  */
 
-public class ViewUtilsDemo {
+public class ViewInjectUtils {
 
     public static void init(Activity activity) {
         bindView(activity);

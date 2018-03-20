@@ -19,7 +19,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".test.TestActivity" />
+        <activity android:name=".mvp.TestActivity" />
         <activity android:name=".rxjava.RxJavaActivity" />
 
         <activity android:name=".Test1Activity" />
@@ -27,6 +27,7 @@
         <activity android:name=".Test3Activity" />
         <activity android:name=".receiver.LocalBroadcastActivity" />
         <activity android:name=".service.TestServiceActivity" />
+        <activity android:name=".service.HanderThreadActivity" />
 
         <service android:name=".service.MyIntentService"/>
         <service android:name=".service.MyService"/>

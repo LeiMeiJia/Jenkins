@@ -1,4 +1,4 @@
-package com.aerozhonghuan.jenkins.test;
+package com.aerozhonghuan.jenkins.mvp;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -6,8 +6,6 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.aerozhonghuan.jenkins.R;
-import com.aerozhonghuan.jenkins.mvp.BasePresenter;
-import com.aerozhonghuan.jenkins.mvp.BaseResult;
 import com.aerozhonghuan.jenkins.mvp.entity.CarPageListData;
 import com.aerozhonghuan.jenkins.mvp.entity.UserInfo;
 import com.aerozhonghuan.jenkins.mvp.presenter.CarListPresenterImpl;

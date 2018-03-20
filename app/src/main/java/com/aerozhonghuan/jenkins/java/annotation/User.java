@@ -1,4 +1,4 @@
-package com.aerozhonghuan.jenkins.annotation;
+package com.aerozhonghuan.jenkins.java.annotation;
 
 /**
  * Created by liuk on 2018/3/6 0006.
@@ -6,7 +6,6 @@ package com.aerozhonghuan.jenkins.annotation;
 
 public class User {
 
-    //    @UserInject(14)
     @UserInject(age = 18, name = "测试")
     private int age;
     private String name;

@@ -14,9 +14,9 @@ import com.aerozhonghuan.mytools.utils.LogUtils;
 import com.aerozhonghuan.mytools.utils.ToastUtils;
 
 /**
- * 使用ResultReceiver在Activity与Service之间进行通信
+ * 1、测试IntentService异步机制
+ * 2、使用ResultReceiver在Activity与Service之间进行通信
  */
-
 public class TestServiceActivity extends AppCompatActivity {
     private static final String TAG = TestServiceActivity.class.getSimpleName();
     private Handler childHandler;
@@ -24,9 +24,7 @@ public class TestServiceActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_test_service);
-//      LogUtils.logd(TAG, LogUtils.getThreadName() + ":" + Integer.toHexString(hashCode()));
-
+        setContentView(R.layout.activity_service);
         // 创建HandlerThread对象
         HandlerThread myThread = new HandlerThread("HandlerThread");
         myThread.start();
@@ -39,10 +37,14 @@ public class TestServiceActivity extends AppCompatActivity {
             }
         };
 
-        // 测试ResultReceiver传递数据
-        testService();
+        // 1、测试IntentService进行异步操作
+        testIntentService();
 
-        // 测试IntentService进行异步操作
+        // 2、测试ResultReceiver传递数据
+        testService();
+    }
+
+    private void testIntentService() {
         findViewById(R.id.btn1).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -73,6 +75,7 @@ public class TestServiceActivity extends AppCompatActivity {
      * 当handler对象不为空，onReceiveResult回调执行在创建Handler的线程。
      */
     private void testService() {
+        // 处理ResultReceiver回调方法
         ResultReceiver resultReceiver = new ResultReceiver(childHandler) {
             @Override
             protected void onReceiveResult(int resultCode, Bundle resultData) {

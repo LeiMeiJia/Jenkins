@@ -6,8 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 
-import com.aerozhonghuan.jenkins.test.TestActivity;
-
 public class Test2Activity extends AppCompatActivity {
 
     @Override

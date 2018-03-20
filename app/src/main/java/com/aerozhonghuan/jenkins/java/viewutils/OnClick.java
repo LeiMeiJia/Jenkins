@@ -1,4 +1,4 @@
-package com.aerozhonghuan.jenkins.viewutils;
+package com.aerozhonghuan.jenkins.java.viewutils;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

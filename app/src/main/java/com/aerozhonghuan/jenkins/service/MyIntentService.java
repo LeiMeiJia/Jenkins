@@ -11,7 +11,7 @@ import android.support.annotation.Nullable;
 import com.aerozhonghuan.mytools.utils.LogUtils;
 
 /**
- *  IntentService，可以看做是Service和HandlerThread的结合体，
+ *  IntentService，可以看做是Service和HandlerThread的结合体，底层通过Handler处理异步任务
  * 在完成了使命之后会自动停止，适合需要在工作线程处理UI无关任务的场景。
  * Created by Administrator on 2018/2/28.
  */
@@ -46,7 +46,7 @@ public class MyIntentService extends IntentService {
         return super.onBind(intent);
     }
 
-    // 运行在子线程中
+    // 运行在子线程中，底层其实是HandlerThread
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
         LogUtils.logd(TAG, LogUtils.getThreadName());

@@ -1,4 +1,4 @@
-package com.aerozhonghuan.jenkins.annotation;
+package com.aerozhonghuan.jenkins.java.reflect;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
