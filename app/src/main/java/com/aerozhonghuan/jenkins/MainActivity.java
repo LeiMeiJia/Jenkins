@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 
+import com.aerozhonghuan.jenkins.java.thread.MyThreadPool;
 import com.aerozhonghuan.jenkins.java.viewutils.ViewInjectUtils;
 import com.aerozhonghuan.jenkins.service.HanderThreadActivity;
 import com.aerozhonghuan.mytools.utils.LogUtils;
@@ -28,13 +29,33 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, HanderThreadActivity.class);
-                startActivity(intent);
+//                Intent intent = new Intent(MainActivity.this, HanderThreadActivity.class);
+//                startActivity(intent);
+                threadTest();
             }
         });
 
         if (savedInstanceState != null) {
             LogUtils.logd(TAG, LogUtils.getThreadName() + savedInstanceState.getString("data"));
+        }
+    }
+
+    public void threadTest() {
+        MyThreadPool instance = MyThreadPool.getInstance();
+        for (int i = 0; i < 110; i++) {
+            instance.execute(new Runnable() {
+                @Override
+                public void run() {
+                    LogUtils.logd(TAG, "ThreadName=" + Thread.currentThread().getName() + "进来了");
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    LogUtils.logd(TAG, "ThreadName=" + Thread.currentThread().getName() + "出去了");
+                }
+            });
+            LogUtils.logd(TAG, "===========");
         }
     }
 
