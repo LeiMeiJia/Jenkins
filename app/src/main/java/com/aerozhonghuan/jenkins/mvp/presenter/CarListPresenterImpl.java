@@ -5,8 +5,8 @@ import com.aerozhonghuan.jenkins.mvp.BasePresenter;
 import com.aerozhonghuan.jenkins.mvp.BasePresenterImpl;
 import com.aerozhonghuan.jenkins.mvp.BaseResult;
 import com.aerozhonghuan.jenkins.mvp.entity.CarPageListData;
-import com.aerozhonghuan.jenkins.mvp.entity.UserInfo;
 import com.aerozhonghuan.jenkins.network.ApiResponse;
+import com.aerozhonghuan.jenkins.network.engine.CallAdapter;
 import com.aerozhonghuan.mytools.utils.LogUtils;
 import com.google.gson.reflect.TypeToken;
 
@@ -43,25 +43,19 @@ public class CarListPresenterImpl extends BasePresenterImpl<CarPageListData> imp
         }.getType();
         // 设置call对象
         setCall(call);
+        CallAdapter callAdapter = new CallAdapter(typeToken, this);
         // 发送请求
-        sendHttpRequest(call, typeToken);
+        sendHttpRequest(call, callAdapter);
     }
 
-    // 当网络状态码为200时，业务层实现自己的回调方法
     @Override
-    public void requestSuccess(ApiResponse<CarPageListData> apiResponse) {
-        // 处理业务层
-        int resultCode = apiResponse.getResultCode();
-        if (resultCode == 200) { // 业务层200
-            result.onCarListSuccess(apiResponse.getData());
-        } else {
-            result.onCarListFail(resultCode, apiResponse.getMessage());
-        }
+    public void onSuccess(CarPageListData carPageListData) {
+        result.onCarListSuccess(carPageListData);
     }
 
-    // 当网络状态码为非200时，业务层实现自己的回调方法
+    // 非200时，业务层实现自己的回调方法
     @Override
-    public void requestFail(int resultCode, String errorMsg) {
+    public void onFail(int resultCode, String errorMsg) {
         result.onCarListFail(resultCode, errorMsg);
     }
 

@@ -1,5 +1,8 @@
 package com.aerozhonghuan.jenkins.mvp;
 
+import com.aerozhonghuan.jenkins.network.api.HttpApi;
+import com.aerozhonghuan.jenkins.network.engine.HttpRequest;
+
 /**
  * Presenter基类
  * Created by Administrator on 2018/2/1.
@@ -7,6 +10,7 @@ package com.aerozhonghuan.jenkins.mvp;
 
 public interface BasePresenter {
 
+    // 优化
     void cancelHttpRequest();
 
     interface LoginPresenter extends BasePresenter {
