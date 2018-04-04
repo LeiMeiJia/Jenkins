@@ -28,6 +28,8 @@
         <activity android:name=".receiver.LocalBroadcastActivity" />
         <activity android:name=".service.TestServiceActivity" />
         <activity android:name=".service.HanderThreadActivity" />
+        <activity android:name="com.aerozhonghuan.demo1.Demo1Activity"/>
+        <activity android:name="com.aerozhonghuan.demo1.Demo2Activity"/>
 
         <service android:name=".service.MyIntentService"/>
         <service android:name=".service.MyService"/>

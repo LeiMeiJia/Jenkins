@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 
+import com.aerozhonghuan.demo1.Demo1Activity;
 import com.aerozhonghuan.jenkins.java.thread.MyThreadPool;
 import com.aerozhonghuan.jenkins.java.viewutils.ViewInjectUtils;
 import com.aerozhonghuan.jenkins.service.HanderThreadActivity;
@@ -29,9 +30,9 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Intent intent = new Intent(MainActivity.this, HanderThreadActivity.class);
-//                startActivity(intent);
-                threadTest();
+                Intent intent = new Intent(MainActivity.this, Demo1Activity.class);
+                startActivity(intent);
+//                threadTest();
             }
         });
 

@@ -55,6 +55,8 @@ android {
             signingConfig signingConfigs.release
 //            applicationIdSuffix ".release"               //配置不同的applicationId
             buildConfigField 'String', 'SERVER_URL', "\"http://jfx.qdfaw.com:8081\";"
+            buildConfigField 'String', 'DEBUG_URL', "\"http://sy.aerozhonghuan.com/test/qdfaw/api\";"
+
         }
 
         debug {
@@ -65,6 +67,7 @@ android {
             signingConfig signingConfigs.debug
 //            applicationIdSuffix ".debug"               //配置不同的applicationId
             buildConfigField 'String', 'SERVER_URL', "\"http://59.46.97.115:8071\";"
+            buildConfigField 'String', 'DEBUG_URL', "\"http://sy.aerozhonghuan.com/test/qdfaw/api\";"
         }
 
         if (isJenkins) {
@@ -119,6 +122,7 @@ dependencies {
     compile 'com.android.support:design:23.4.0'
 //    compile(name: 'common-1.0.13', ext: 'aar') //aar 引用
     testCompile 'junit:junit:4.12'
+    testCompile 'org.json:json:20180130'
     compile 'com.squareup.retrofit2:retrofit:2.3.0' // retrofit 网络框架
     compile 'com.squareup.retrofit2:converter-gson:2.3.0' // retrofit与gson适配器
     compile 'com.squareup.retrofit2:converter-scalars:2.3.0'  // retrofit适配器
@@ -127,4 +131,6 @@ dependencies {
     compile "io.reactivex.rxjava2:rxjava:2.1.8" // rxjava
     compile 'io.reactivex.rxjava2:rxandroid:2.0.1' // retrofit
     compile 'com.common:mytools:1.0.02'
+    compile 'org.greenrobot:eventbus:3.0.0' // eventbus
+
 }

@@ -3,6 +3,9 @@ package com.aerozhonghuan.jenkins;
 import android.app.Application;
 import android.os.Environment;
 
+import com.aerozhonghuan.demo1.framworks.core.AppAction;
+import com.aerozhonghuan.demo1.framworks.core.AppActionImpl;
+
 import java.io.File;
 
 /**
@@ -13,6 +16,7 @@ import java.io.File;
 public class MyApplication extends Application {
 
     private File file;
+    private AppAction appAction;
 
     @Override
     public void onCreate() {
@@ -25,5 +29,15 @@ public class MyApplication extends Application {
         // 设置未捕获异常处理器
         DefaultExceptionHandler exceptionHandler = new DefaultExceptionHandler(file);
         Thread.setDefaultUncaughtExceptionHandler(exceptionHandler);
+        //
+        appAction = new AppActionImpl();
+    }
+
+    public AppAction getAppAction() {
+        return appAction;
+    }
+
+    public void setAppAction(AppAction appAction) {
+        this.appAction = appAction;
     }
 }
