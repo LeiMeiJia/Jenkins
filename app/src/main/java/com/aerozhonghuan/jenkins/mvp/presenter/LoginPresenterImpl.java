@@ -2,70 +2,66 @@ package com.aerozhonghuan.jenkins.mvp.presenter;
 
 
 import com.aerozhonghuan.jenkins.mvp.BasePresenter;
-import com.aerozhonghuan.jenkins.mvp.BasePresenterImpl;
 import com.aerozhonghuan.jenkins.mvp.BaseResult;
 import com.aerozhonghuan.jenkins.mvp.entity.UserInfo;
+import com.aerozhonghuan.jenkins.mvp.model.HttpCallback;
+import com.aerozhonghuan.jenkins.mvp.model.HttpEngine;
 import com.aerozhonghuan.jenkins.network.ApiResponse;
-import com.aerozhonghuan.jenkins.network.engine.CallAdapter;
-import com.aerozhonghuan.mytools.utils.LogUtils;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
-import java.util.HashMap;
-
-import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
-import retrofit2.Call;
 
 
 /**
  * Created by Administrator on 2018/2/1.
  */
 
-public class LoginPresenterImpl extends BasePresenterImpl<UserInfo> implements BasePresenter.LoginPresenter {
+public class LoginPresenterImpl implements BasePresenter.LoginPresenter {
 
-    private BaseResult.LoginResult loginResult;
+    private BaseResult.LoginResult result;
+    private HttpEngine httpEngine;
 
-    public LoginPresenterImpl(BaseResult.LoginResult loginResult) {
-        super();
-        this.loginResult = loginResult;
+    public LoginPresenterImpl(BaseResult.LoginResult result) {
+        this.result = result;
+        httpEngine = HttpEngine.getInstance();
     }
 
     // 处理网络层
     @Override
     public void login(String username, String password, String deviceId, String type) {
-        LogUtils.logd("BasePresenterImpl", LogUtils.getThreadName() + "this1:" + this);
-        Call<ResponseBody> call;
-        if ("GET".equals(type)) {
-            // 创建参数
-            HashMap<String, String> hashMap = httpParameters.loginGet(username, password, deviceId);
-            call = httpApi.loginGet(hashMap);
-        } else {
-            // 创建参数
-            RequestBody requestBody = httpParameters.loginPost(username, password, deviceId);
-            // 创建接口请求
-            call = httpApi.loginPost(requestBody);
-        }
+
         // 创建返回数据类型
         Type typeToken = new TypeToken<ApiResponse<UserInfo>>() {
         }.getType();
-        // 设置call对象
-        setCall(call);
-        CallAdapter callAdapter = new CallAdapter(typeToken, this);
-        // 发送请求
-        sendHttpRequest(call, callAdapter);
+        if ("GET".equals(type)) {
+            httpEngine.loginGet(username, password, deviceId, new HttpCallback<UserInfo>(typeToken) {
+                @Override
+                public void onSuccess(UserInfo userInfo) {
+                    result.onLoginSuccess(userInfo);
+                }
+
+                @Override
+                public void onFail(int resultCode, String errorMsg) {
+                    result.onLoginFail(resultCode, errorMsg);
+                }
+            });
+        } else {
+            httpEngine.loginPost(username, password, deviceId, new HttpCallback<UserInfo>(typeToken) {
+                @Override
+                public void onSuccess(UserInfo userInfo) {
+                    result.onLoginSuccess(userInfo);
+                }
+
+                @Override
+                public void onFail(int resultCode, String errorMsg) {
+                    result.onLoginFail(resultCode, errorMsg);
+                }
+            });
+        }
     }
 
-    // 当业务层状态码为200时，业务层实现自己的回调方法
     @Override
-    public void onSuccess(UserInfo userInfo) {
-        loginResult.onLoginSuccess(userInfo);
+    public void cancel() {
+        httpEngine.cancelRequest("loginGet");
     }
-
-    // 非200时，业务层实现自己的回调方法
-    @Override
-    public void onFail(int resultCode, String errorMsg) {
-        loginResult.onLoginFail(resultCode, errorMsg);
-    }
-
 }

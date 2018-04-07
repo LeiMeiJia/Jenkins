@@ -8,8 +8,8 @@ import com.aerozhonghuan.jenkins.network.ApiResponse;
  * Created by Administrator on 2018/2/1.
  */
 
-public interface HttpCallback<T> {
-    void requestSuccess(ApiResponse<T> apiResponse);
+public interface HttpResponse {
+    void responseSuccess(String result);
 
-    void requestFail(int resultCode, String errorMsg);
+    void responseFail(int resultCode, String errorMsg);
 }

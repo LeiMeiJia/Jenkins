@@ -72,8 +72,9 @@ public class HttpRequest {
     }
 
     // 发送网络请求，请求执行在子线程
-    public void setHttpRequest(Call<ResponseBody> call, CallAdapter callAdapter) {
-        // retrofit 响应结果执行在UI线程，不过OkHttp的onResponse结果执行在子线程中
+    public void sendHttpRequest(Call<ResponseBody> call,HttpResponse httpResponse) {
+        // 每个Call实例可以且只能执行一次请求，不能使用相同的对象再次执行execute()或enqueue()。
+        CallAdapter callAdapter = new CallAdapter(httpResponse);
         call.enqueue(callAdapter);
     }
 

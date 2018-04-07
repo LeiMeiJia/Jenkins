@@ -12,12 +12,9 @@ import com.aerozhonghuan.jenkins.mvp.presenter.CarListPresenterImpl;
 import com.aerozhonghuan.jenkins.mvp.presenter.LoginPresenterImpl;
 import com.aerozhonghuan.mytools.utils.LogUtils;
 
-import java.util.ArrayList;
-
 public class TestActivity extends AppCompatActivity {
 
     private static final String TAG = TestActivity.class.getSimpleName();
-    private ArrayList<BasePresenter> list = new ArrayList<>();
     private BasePresenter.LoginPresenter login;
     private BasePresenter.CarListPresenter carList;
 
@@ -27,8 +24,6 @@ public class TestActivity extends AppCompatActivity {
         setContentView(R.layout.activity_test);
         login = getLoginPresenter();
         carList = getCarListPresenter();
-        list.add(login);
-        list.add(carList);
         findViewById(R.id.btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -52,7 +47,7 @@ public class TestActivity extends AppCompatActivity {
                 LogUtils.logd(TAG, LogUtils.getThreadName() + "userInfo:" + userInfo);
                 Toast.makeText(getApplicationContext(), "请求成功", Toast.LENGTH_SHORT).show();
 
-                carList.carList(userInfo.getToken(), 1, 20, "00040005");
+                carList.carPageList(userInfo.getToken(), 1, 20, "00040005");
             }
 
             @Override
@@ -82,10 +77,7 @@ public class TestActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        LogUtils.logd(TAG, LogUtils.getThreadName() + "list:" + list.size());
-        for (BasePresenter presenter : list) {
-            LogUtils.logd(TAG, LogUtils.getThreadName() + "presenter:" + presenter);
-            presenter.cancelHttpRequest();
-        }
+        login.cancel();
+        carList.cancel();
     }
 }

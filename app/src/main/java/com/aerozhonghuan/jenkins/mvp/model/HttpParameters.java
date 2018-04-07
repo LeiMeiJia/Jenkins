@@ -1,4 +1,4 @@
-package com.aerozhonghuan.jenkins.network.engine;
+package com.aerozhonghuan.jenkins.mvp.model;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

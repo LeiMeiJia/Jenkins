@@ -10,15 +10,14 @@ import com.aerozhonghuan.jenkins.network.engine.HttpRequest;
 
 public interface BasePresenter {
 
-    // 优化
-    void cancelHttpRequest();
+    void cancel();
 
     interface LoginPresenter extends BasePresenter {
         void login(String username, String password, String deviceId, String type);
     }
 
     interface CarListPresenter extends BasePresenter {
-        void carList(String token, int page_size, int page_number, String processCode);
+        void carPageList(String token, int page_size, int page_number, String processCode);
     }
 
 }
