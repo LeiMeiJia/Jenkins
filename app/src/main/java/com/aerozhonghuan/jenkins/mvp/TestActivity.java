@@ -47,7 +47,7 @@ public class TestActivity extends AppCompatActivity {
                 LogUtils.logd(TAG, LogUtils.getThreadName() + "userInfo:" + userInfo);
                 Toast.makeText(getApplicationContext(), "请求成功", Toast.LENGTH_SHORT).show();
 
-                carList.carPageList(userInfo.getToken(), 1, 20, "00040005");
+//                carList.carPageList(userInfo.getToken(), 1, 20, "00040005");
             }
 
             @Override

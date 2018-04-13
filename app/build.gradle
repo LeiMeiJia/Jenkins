@@ -54,8 +54,8 @@ android {
             debuggable true                                              // 开启调试
             signingConfig signingConfigs.release
 //            applicationIdSuffix ".release"               //配置不同的applicationId
-            buildConfigField 'String', 'SERVER_URL', "\"http://jfx.qdfaw.com:8081\";"
-            buildConfigField 'String', 'DEBUG_URL', "\"http://sy.aerozhonghuan.com/test/qdfaw/api\";"
+            buildConfigField 'String', 'HY_URL', "\"http://jfx.qdfaw.com:8081/\";"
+            buildConfigField 'String', 'FAW_URL', "\"http://sy.aerozhonghuan.com/test/qdfaw/api/\";"
 
         }
 
@@ -66,8 +66,8 @@ android {
             debuggable true
             signingConfig signingConfigs.debug
 //            applicationIdSuffix ".debug"               //配置不同的applicationId
-            buildConfigField 'String', 'SERVER_URL', "\"http://59.46.97.115:8071\";"
-            buildConfigField 'String', 'DEBUG_URL', "\"http://sy.aerozhonghuan.com/test/qdfaw/api\";"
+            buildConfigField 'String', 'HY_URL', "\"http://59.46.97.115:8071/\";"
+            buildConfigField 'String', 'FAW_URL', "\"http://sy.aerozhonghuan.com/test/qdfaw/api/\";"
         }
 
         if (isJenkins) {
@@ -132,5 +132,6 @@ dependencies {
     compile 'io.reactivex.rxjava2:rxandroid:2.0.1' // retrofit
     compile 'com.common:mytools:1.0.02'
     compile 'org.greenrobot:eventbus:3.0.0' // eventbus
+    debugCompile  'com.squareup.leakcanary:leakcanary-android:1.5.4'
 
 }

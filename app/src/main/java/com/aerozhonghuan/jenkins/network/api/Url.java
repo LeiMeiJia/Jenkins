@@ -7,7 +7,7 @@ package com.aerozhonghuan.jenkins.network.api;
 
 public class Url {
 
-    public static final String get = "/qingqinew/qingqi/product/";
-    public static final String post = "/hyapipro/hongyan/serverstation/";
+    public static final String get = "qingqinew/qingqi/product/";
+    public static final String post = "hyapipro/hongyan/serverstation/";
 
 }

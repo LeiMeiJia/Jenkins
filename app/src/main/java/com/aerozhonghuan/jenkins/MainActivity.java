@@ -2,15 +2,24 @@ package com.aerozhonghuan.jenkins;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 
-import com.aerozhonghuan.demo1.Demo1Activity;
-import com.aerozhonghuan.jenkins.java.thread.MyThreadPool;
-import com.aerozhonghuan.jenkins.java.viewutils.ViewInjectUtils;
-import com.aerozhonghuan.jenkins.service.HanderThreadActivity;
+import com.aerozhonghuan.demo.Demo1Activity;
+import com.aerozhonghuan.java.thread.MyCallable;
+import com.aerozhonghuan.java.thread.MyFutureTask;
+import com.aerozhonghuan.java.thread.MyThreadPool;
+import com.aerozhonghuan.java.thread.Task;
+import com.aerozhonghuan.java.viewutils.ViewInjectUtils;
 import com.aerozhonghuan.mytools.utils.LogUtils;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * 1、注意：Toast的创建需要依赖Handler，存在handler的话，子线程也可以弹出toast
@@ -25,39 +34,19 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Log.d(TAG, "ip:" + BuildConfig.SERVER_URL);
         ViewInjectUtils.init(this);
         findViewById(R.id.btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, Demo1Activity.class);
                 startActivity(intent);
-//                threadTest();
             }
         });
 
         if (savedInstanceState != null) {
             LogUtils.logd(TAG, LogUtils.getThreadName() + savedInstanceState.getString("data"));
         }
-    }
-
-    public void threadTest() {
-        MyThreadPool instance = MyThreadPool.getInstance();
-        for (int i = 0; i < 110; i++) {
-            instance.execute(new Runnable() {
-                @Override
-                public void run() {
-                    LogUtils.logd(TAG, "ThreadName=" + Thread.currentThread().getName() + "进来了");
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    LogUtils.logd(TAG, "ThreadName=" + Thread.currentThread().getName() + "出去了");
-                }
-            });
-            LogUtils.logd(TAG, "===========");
-        }
+        test1();
     }
 
     @Override
@@ -73,4 +62,25 @@ public class MainActivity extends AppCompatActivity {
         LogUtils.logd(TAG, LogUtils.getThreadName());
     }
 
+    private void test1() {
+//        MyThreadPool pool = MyThreadPool.getInstance();
+//        Task task = new Task();
+//        // 需考虑资源共享问题
+//        for (int i = 1; i < 50; i++) {
+//            pool.execute(task);
+//        }
+
+        MyCallable callable = new MyCallable();
+        MyFutureTask task = new MyFutureTask(callable);
+        ExecutorService es = Executors.newFixedThreadPool(2);
+        es.execute(task);
+        System.out.println("任务被开始于" + new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()));
+        SystemClock.sleep(2000);
+        task.cancel(true);
+
+//        Log.d(TAG, Thread.currentThread().getName() + ":getCorePoolSize：" + executor.getCorePoolSize());
+//        Log.d(TAG, Thread.currentThread().getName() + ":getPoolSize：" + executor.getPoolSize());
+//        Log.d(TAG, Thread.currentThread().getName() + ":getQueue：" + executor.getQueue().size());
+//
+    }
 }

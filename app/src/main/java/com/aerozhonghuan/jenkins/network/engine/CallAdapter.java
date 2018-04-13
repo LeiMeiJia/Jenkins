@@ -4,8 +4,6 @@ import android.text.TextUtils;
 
 import com.aerozhonghuan.mytools.utils.LogUtils;
 
-import java.io.IOException;
-
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -32,21 +30,17 @@ public class CallAdapter implements Callback<ResponseBody> {
         // 需考虑网络超时未响应的情况，404，500，无网络
         if (response.isSuccessful()) { // 网络层200
             ResponseBody responseBody = response.body(); //response 不能被解析的情况下，response.body()会返回null
-            if (responseBody != null) {
-                try {
+            try {
+                if (responseBody != null) {
                     String result = new String(responseBody.bytes());
                     LogUtils.logd(TAG, LogUtils.getThreadName() + "result:" + result);
                     if (!TextUtils.isEmpty(result)) {
                         httpResponse.responseSuccess(result);
-                    } else {
-                        onFail();
+                        return;
                     }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    onFail();
                 }
-            } else {
-                LogUtils.logd(TAG, LogUtils.getThreadName() + "Response is not successful");
+            } catch (Exception e) {
+                e.printStackTrace();
                 onFail();
             }
         } else {

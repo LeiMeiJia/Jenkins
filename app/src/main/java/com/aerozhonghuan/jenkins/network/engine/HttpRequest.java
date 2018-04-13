@@ -36,14 +36,20 @@ public class HttpRequest {
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
                 .addInterceptor(httpLoggingInterceptor)
 //                .retryOnConnectionFailure(false) // 禁止重试，方法为设置出现错误进行重新连接。
-                .addNetworkInterceptor(new NetworkInterceptor()) //  让所有网络请求都附上你的拦截器。设置重试
+                // 应用拦截器  让所有网络请求都附上你的拦截器。设置重试
+                // 当网络链路异常时，也就是网络请求未发送出去时，网络请求无响应，NetworkInterceptor会抛出异常，不会尝试重新连接
+//                .addInterceptor(new NetworkInterceptor(2,0))
+                //  网络拦截器
+                // 当网络链路正常时，自定义请求重试时，发送的请求必须成功一次后才能尝试再次连接，否则会崩溃
+                // 当网络链路异常时，也就是网络请求未发送出去时，网络请求无响应，会抛出网络异常，不会崩溃，且不会尝试重新连接
+//                .addNetworkInterceptor(new NetworkInterceptor(2,0))
                 .readTimeout(15, TimeUnit.SECONDS)
                 .connectTimeout(15, TimeUnit.SECONDS)
                 .writeTimeout(15, TimeUnit.SECONDS)
                 .build();
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(BuildConfig.SERVER_URL)
+                .baseUrl(BuildConfig.FAW_URL)
                 .client(okHttpClient)
                 .build();
         // 网络接口

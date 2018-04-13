@@ -9,9 +9,9 @@ import android.view.View;
 import android.widget.Button;
 
 import com.aerozhonghuan.jenkins.R;
-import com.aerozhonghuan.jenkins.java.viewutils.OnClick;
-import com.aerozhonghuan.jenkins.java.viewutils.ViewInject;
-import com.aerozhonghuan.jenkins.java.viewutils.ViewInjectUtils;
+import com.aerozhonghuan.java.viewutils.OnClick;
+import com.aerozhonghuan.java.viewutils.ViewInject;
+import com.aerozhonghuan.java.viewutils.ViewInjectUtils;
 import com.aerozhonghuan.mytools.utils.LogUtils;
 
 /**
