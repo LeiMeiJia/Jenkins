@@ -11,7 +11,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * 自定义线程池
  * <p>
- * ThreadPoolExecutor(int corePoolSize,  // 核心池大小 （cpu核数*2+1）表示同时执行的线程数量
+ * ThreadPoolExecutor(int corePoolSize,  // 核心池大小
  * int maximumPoolSize,  // 最大池大小
  * long keepAliveTime,   // 任务执行完后存活的时间
  * TimeUnit unit,        // 时间单位
@@ -37,7 +37,7 @@ public class MyThreadPool {
 
     private MyThreadPool() {
 
-        LinkedBlockingQueue<Runnable> blockingQueue = new LinkedBlockingQueue<>(105); //100是最大上限
+        LinkedBlockingQueue<Runnable> blockingQueue = new LinkedBlockingQueue<>(60); //100是最大上限
         // 创建一个线程工厂
         ThreadFactory threadFactory = new ThreadFactory() {
             AtomicInteger integer = new AtomicInteger(0);
@@ -51,7 +51,7 @@ public class MyThreadPool {
             }
         };
         // 同时最大并发数时110
-        executor = new ThreadPoolExecutor(5, 10, 2, TimeUnit.SECONDS, blockingQueue, threadFactory);
+        executor = new ThreadPoolExecutor(5, 10, 1, TimeUnit.SECONDS, blockingQueue, threadFactory);
     }
 
     public static MyThreadPool getInstance() {
@@ -80,7 +80,4 @@ public class MyThreadPool {
         executor.remove(runnable);
     }
 
-    public ThreadPoolExecutor getExecutor() {
-        return executor;
-    }
 }
