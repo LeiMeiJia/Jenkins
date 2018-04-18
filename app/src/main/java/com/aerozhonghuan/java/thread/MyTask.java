@@ -10,26 +10,26 @@ import java.util.concurrent.atomic.AtomicInteger;
  * 线程池需考虑资源共享问题
  * 1、使用synchronized后，相当于串行执行，降低了效率
  * 2、使用AtomicInteger可以保持数据唯一，且并发执行
- * 3、使用信号量 Semaphore，当锁被完全占用时，后面线程会被阻塞，进入排队等待
+ * 3、Semaphore可以控制某个共享资源可被同时访问的次数
  * <p>
- * ThreadLocal
+ * ThreadLocal的作用是提供线程内的局部变量，这种变量在线程的生命周期内起作用
  * Created by Administrator on 2018/3/20.
  */
 
 public class MyTask implements Runnable {
     private static final String TAG = MyTask.class.getSimpleName();
     private AtomicInteger atomicInteger = new AtomicInteger(100);
-    private Semaphore semaphore = new Semaphore(5); // 信号量
+    private Semaphore semaphore = new Semaphore(1); // 信号量 相当于串行执行
     private int i = 100;
 
     @Override
     public void run() {
-        method1();
+        method3();
     }
 
     private void method1() {
         Log.d(TAG, i + "：开始运行" + "，thread name is：" + Thread.currentThread().getName());
-        SystemClock.sleep(5000);
+        SystemClock.sleep(50);
         i--;
         Log.d(TAG, i + "：结束运行" + "，thread name is：" + Thread.currentThread().getName());
     }
