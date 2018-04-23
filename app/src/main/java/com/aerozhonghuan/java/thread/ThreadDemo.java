@@ -1,5 +1,9 @@
 package com.aerozhonghuan.java.thread;
 
+import com.aerozhonghuan.java.thread.produce.Consumer;
+import com.aerozhonghuan.java.thread.produce.Producer;
+import com.aerozhonghuan.java.thread.produce.Student;
+
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -30,5 +34,23 @@ public class ThreadDemo {
         for (int i = 1; i < 50; i++) {
             pool.execute(task);
         }
+    }
+
+    public static void testProduce() {
+        Student s = new Student(false);
+        Consumer c = new Consumer(s);
+        Producer p = new Producer(s);
+
+        Thread t1 = new Thread(c);
+        Thread t2 = new Thread(p);
+
+        t1.start();
+        t2.start();
+
+        Thread t3 = new Thread(c);
+        Thread t4 = new Thread(p);
+
+        t3.start();
+        t4.start();
     }
 }
