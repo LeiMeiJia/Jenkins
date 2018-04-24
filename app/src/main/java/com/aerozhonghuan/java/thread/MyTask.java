@@ -31,7 +31,7 @@ public class MyTask implements Runnable {
         method3();
     }
 
-    private void method1() {
+    private synchronized void method1() {
         Log.d(TAG, i + "：开始运行" + "，thread name is：" + Thread.currentThread().getName());
         SystemClock.sleep(50);
         i--;
