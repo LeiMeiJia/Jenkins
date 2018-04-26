@@ -39,9 +39,12 @@ android {
         // 如果配置参数相同，优先取值buildTypes中的参数
 //        flavors {
 //            applicationId "com.aerozhonghuan.jenkins.flavors";
-//            signingConfig signingConfigs.myConfig
 //            buildConfigField 'String', 'SERVER_URL', "\"http://jfx.qdfaw.com:8081/api/test\";"
 //        }
+//        demo {
+//            buildConfigField 'String', 'SERVER_URL', "\"http://jfx.qdfaw.com:8081/api/test\";"
+//        }
+
     }
 
     buildTypes {
