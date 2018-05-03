@@ -14,7 +14,6 @@ import com.aerozhonghuan.mytools.utils.LogUtils;
  * 1、注意：Toast的创建需要依赖Handler，存在handler的话，子线程也可以弹出toast
  * 2、注意：intent传递对象时，是将对象拷贝了一份进行传递
  * 3、注意：quitSafely和quit的区别
- * 4、注意：重写equal()时为什么也得重写hashCode()
  */
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
