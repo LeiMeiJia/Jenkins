@@ -3,6 +3,7 @@ package com.aerozhonghuan.java.reflect;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.lang.reflect.Proxy;
 
 /**
@@ -32,13 +33,13 @@ public class ReflectTest {
     public static void reflect() throws Exception {
         //      LogUtils.logd(TAG, LogUtils.getThreadName() + ":" + Integer.toHexString(hashCode()));
         AdminDaoImpl adminDao = new AdminDaoImpl();
+
         // 1、4 种方式获取类的字节码文件对象
         // AdminDao.class;
         // adminDao.getClass();
         // Class.forName("com.aerozhonghuan.java.reflect.AdminDaoImpl"); // 优先考虑
         // ClassLoader.getSystemClassLoader().loadClass("com.aerozhonghuan.java.reflect.AdminDaoImpl");
         Class clazz = Class.forName("com.aerozhonghuan.java.reflect.AdminDaoImpl");
-
 
         // 2、获取成员变量
         System.out.println("====获取公共成员变量，包括父类=====");
@@ -51,7 +52,6 @@ public class ReflectTest {
         for (Field declareField : declaredFields) {
             System.out.println("declareField:" + declareField.getName());
         }
-
 
         // 3、获取成员方法
         System.out.println("====获取公共成员方法，包括父类=====");
@@ -100,4 +100,79 @@ public class ReflectTest {
         adminDao2.register();
         adminDao2.login();
     }
+
+    public static void test() {
+        System.out.println(Integer.TYPE == int.class ? true : false);
+    }
+
+    //  1、数组参数类型
+    public static void testFunc1() throws Exception {
+        ReflectTest test = new ReflectTest();
+        Class clazz = test.getClass();
+        Method func = clazz.getDeclaredMethod("func1", String[].class);
+        func.setAccessible(true);
+        // 注意：可变参数，这个变量其实是数组，它会自动把多个参数组装成一个数组
+        func.invoke(test, new String[1]);// 运行正常：null
+        func.invoke(test, (Object) new String[]{"a", "b"}); // 运行正常：2
+        func.invoke(test, new Object[]{new String[]{"a", "b", "c"}}); // 运行正常：3
+//        func.invoke(test, new String[]{"a"}); // 报错：将可变参数拆解后，入参为String-->a，与func1入参String[]类型不符合
+//        func.invoke(test, new String[]{"a", "b"}); // 报错：将可变参数拆解后，入参个数为2个，与func1入参个数为1不符合
+//        func.invoke(test, new String[2]);// 报错：同上
+    }
+
+    public static void testFunc2() throws Exception {
+        ReflectTest test = new ReflectTest();
+        Class clazz = test.getClass();
+        Method func = clazz.getDeclaredMethod("func2", String.class, String[].class);
+        func.setAccessible(true);
+        String str = new String();
+        // 注意：可变参数，这个变量其实是数组，它会自动把多个参数组装成一个数组
+        func.invoke(test, str, new String[1]); // 运行正常：1
+        func.invoke(test, str, (Object) new String[]{"a", "b"}); // 运行正常：2
+//        func.invoke(test, str, new Object[]{new String[]{"a", "b", "c"}}); // 报错：入参为Object[]类型，与func2入参String[]类型不符合
+        func.invoke(test, str, new String[]{"a"}); // 运行正常：1
+        func.invoke(test, str, new String[]{"a", "b"}); // 运行正常：2
+        func.invoke(test, str, new String[2]);// 运行正常：2
+    }
+
+    private void func1(String[] args) {
+        System.out.println(args == null ? "null" : args.length);
+    }
+
+    private void func2(String key, String[] args) {
+        System.out.println(args == null ? "null" : args.length);
+    }
+
+    private static final Integer INTEGER_VALUE = 100;
+    private static final int INT_VALUE = 100;
+
+    // 2、通过反射修改常量值
+    public static void testFinal() throws Exception {
+        System.out.println("INTEGER_VALUE:" + INTEGER_VALUE);
+        System.out.println("INT_VALUE:" + INT_VALUE);
+        ReflectTest test = new ReflectTest();
+        Class clazz = test.getClass();
+        Field field1 = clazz.getDeclaredField("INTEGER_VALUE");
+        Field field2 = clazz.getDeclaredField("INT_VALUE");
+        field1.setAccessible(true);
+        field2.setAccessible(true);
+        // 去除final修饰符的影响，将字段设为可修改的
+        Field modifiersField = Field.class.getDeclaredField("modifiers");
+        modifiersField.setAccessible(true);
+        modifiersField.setInt(field1, field1.getModifiers() & ~Modifier.FINAL);
+        modifiersField.setInt(field2, field2.getModifiers() & ~Modifier.FINAL);
+        field1.set(test, 200);
+        // 注意：修改final 基本类型与String类型常量时，在编译时其值已经被替换，所有通过反射修改不起作用
+        field2.set(test, 300);
+        System.out.println("INTEGER_VALUE:" + INTEGER_VALUE);
+        /*
+         * 对于基本类型的静态常量，JAVA在编译的时候就会把代码中对此常量中引用的地方替换成相应常量值。
+         * 编译时会被优化成下面这样：System.out.println(100);
+         */
+        System.out.println("INT_VALUE:" + INT_VALUE);
+
+    }
+
+    public
+
 }
