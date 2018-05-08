@@ -49,6 +49,7 @@ public class ReflectTest {
         }
         System.out.println("====获取所有成员变量，不包括父类=====");
         Field[] declaredFields = clazz.getDeclaredFields(); // 获取所有已声明的成员变量。但不能得到其父类的成员变量
+//        declaredFields = Field.class.getDeclaredFields();
         for (Field declareField : declaredFields) {
             System.out.println("declareField:" + declareField.getName());
         }
@@ -61,6 +62,7 @@ public class ReflectTest {
         }
         System.out.println("====获取所有成员方法，不包括父类======");
         Method[] declaredMethods = clazz.getDeclaredMethods(); // 获取返回类或接口声明的所有方法，不包括继承的方法。
+//        declaredMethods = Method.class.getDeclaredMethods();
         for (Method declaredMethod : declaredMethods) {
             System.out.println("declaredMethod:" + declaredMethod.getName());
         }
@@ -70,6 +72,7 @@ public class ReflectTest {
         Field name = clazz.getDeclaredField("name");
         // 暴力破解
         name.setAccessible(true);
+//        System.out.println("name:" + name.get(adminDao));
         name.set(adminDao, "测试");
         System.out.println("adminDao:" + adminDao);
 
@@ -105,7 +108,7 @@ public class ReflectTest {
         System.out.println(Integer.TYPE == int.class ? true : false);
     }
 
-    //  1、数组参数类型
+    // ============== 1、数组参数类型============
     public static void testFunc1() throws Exception {
         ReflectTest test = new ReflectTest();
         Class clazz = test.getClass();
@@ -146,7 +149,7 @@ public class ReflectTest {
     private static final Integer INTEGER_VALUE = 100;
     private static final int INT_VALUE = 100;
 
-    // 2、通过反射修改常量值
+    // ============== 2、通过反射修改常量值============
     public static void testFinal() throws Exception {
         System.out.println("INTEGER_VALUE:" + INTEGER_VALUE);
         System.out.println("INT_VALUE:" + INT_VALUE);
@@ -156,11 +159,22 @@ public class ReflectTest {
         Field field2 = clazz.getDeclaredField("INT_VALUE");
         field1.setAccessible(true);
         field2.setAccessible(true);
-        // 去除final修饰符的影响，将字段设为可修改的
+
+        // Field 对象有个一个属性叫做 modifiers, 它表示的是属性是否是 public, private, static, final 等修饰的组合。
         Field modifiersField = Field.class.getDeclaredField("modifiers");
         modifiersField.setAccessible(true);
+
+        System.out.println("modifiersField:" + Modifier.toString(modifiersField.getModifiers()));
+        System.out.println("field1:" + Modifier.toString(field1.getModifiers()));
+        System.out.println("field2:" + Modifier.toString(field2.getModifiers()));
+//        System.out.println("modifiersField:" + field2.getInt(null)); // final获取后后不能设置
+
+
+        //  用按位取反 ~ 再按位与，~ 操作把 final 从修饰集中剔除掉，其他特性如 private, static 保持不变。
         modifiersField.setInt(field1, field1.getModifiers() & ~Modifier.FINAL);
         modifiersField.setInt(field2, field2.getModifiers() & ~Modifier.FINAL);
+        System.out.println("field1:" + Modifier.toString(field1.getModifiers()));
+//        System.out.println("modifiersField:" + field2.getInt(null)); // final获取后后不能设置
         field1.set(test, 200);
         // 注意：修改final 基本类型与String类型常量时，在编译时其值已经被替换，所有通过反射修改不起作用
         field2.set(test, 300);
@@ -173,6 +187,36 @@ public class ReflectTest {
 
     }
 
-    public
+    private static void testInner() throws Exception {
+        ReflectTest test = new ReflectTest();
+        Class clazz = test.getClass();
+        Class[] declaredClasses = clazz.getDeclaredClasses();
+        for (Class cls : declaredClasses) {
+            int modifiers = cls.getModifiers();
+            String name = Modifier.toString(modifiers);
+            if (name.contains("static")) {
+                Object instance = cls.newInstance();
+            }
+        }
+
+    }
+
+
+    private class InnerA {
+        public InnerA() {
+        }
+    }
+
+    private static class InnerB {
+        public InnerB() {
+        }
+    }
+
+    private Runnable r = new Runnable() {
+        @Override
+        public void run() {
+            System.out.println("Method run of Runnable r");
+        }
+    };
 
 }
