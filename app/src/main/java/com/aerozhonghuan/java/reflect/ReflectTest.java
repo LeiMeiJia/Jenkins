@@ -51,6 +51,8 @@ public class ReflectTest {
         Field[] declaredFields = clazz.getDeclaredFields(); // 获取所有已声明的成员变量。但不能得到其父类的成员变量
 //        declaredFields = Field.class.getDeclaredFields();
         for (Field declareField : declaredFields) {
+//            Class<?> type = declareField.getType();  // 获取成员变量类型
+//            System.out.println("type:" + type.getName());
             System.out.println("declareField:" + declareField.getName());
         }
 
@@ -72,7 +74,7 @@ public class ReflectTest {
         Field name = clazz.getDeclaredField("name");
         // 暴力破解
         name.setAccessible(true);
-//        System.out.println("name:" + name.get(adminDao));
+        System.out.println("name:" + name.get(adminDao));  // 获取成员变脸默认值
         name.set(adminDao, "测试");
         System.out.println("adminDao:" + adminDao);
 
@@ -147,12 +149,10 @@ public class ReflectTest {
     }
 
     private static final Integer INTEGER_VALUE = 100;
-    private static final int INT_VALUE = 100;
+    public static final int INT_VALUE = 100;
 
     // ============== 2、通过反射修改常量值============
     public static void testFinal() throws Exception {
-        System.out.println("INTEGER_VALUE:" + INTEGER_VALUE);
-        System.out.println("INT_VALUE:" + INT_VALUE);
         ReflectTest test = new ReflectTest();
         Class clazz = test.getClass();
         Field field1 = clazz.getDeclaredField("INTEGER_VALUE");
@@ -160,31 +160,46 @@ public class ReflectTest {
         field1.setAccessible(true);
         field2.setAccessible(true);
 
-        // Field 对象有个一个属性叫做 modifiers, 它表示的是属性是否是 public, private, static, final 等修饰的组合。
+        /*
+         * 注意：
+         * 1、每个对象的成员变量在反射时会生成一个Field对象
+         * 2、Field 对象有个一个属性叫做 modifiers,它表示的是属性是否是 public, private, static, final 等修饰的组合
+         * 因此，可以获取每个成员变量的修饰符，两种方式
+         * 1、通过获取Field对象modifiers成员变量的值：Modifier.toString((int)modifiersField.get(field1))
+         * 2、通过调用Field对象的getModifiers()方法获取：Modifier.toString(field1.getModifiers())
+         */
         Field modifiersField = Field.class.getDeclaredField("modifiers");
         modifiersField.setAccessible(true);
 
-        System.out.println("modifiersField:" + Modifier.toString(modifiersField.getModifiers()));
-        System.out.println("field1:" + Modifier.toString(field1.getModifiers()));
-        System.out.println("field2:" + Modifier.toString(field2.getModifiers()));
-//        System.out.println("modifiersField:" + field2.getInt(null)); // final获取后后不能设置
+//        System.out.println("modifiersField1:" + Modifier.toString((int) modifiersField.get(field1)));
+//        System.out.println("modifiersField2:" + Modifier.toString((int) modifiersField.get(field2)));
+//        System.out.println("field1:" + Modifier.toString(field1.getModifiers()));
+//        System.out.println("field2:" + Modifier.toString(field2.getModifiers()));
 
+        /*
+         * 注意：
+         * 1、用static final 修饰的成员变量，通过反射调用Field对象get()方法获取值后，
+         * 再调用Field对象set()方法修改值，会抛出异常 IllegalAccessException
+         * 2、只用 static 或者 final 修饰的成员变量，调用get()方法后
+         * 再调用set()方法修改值，运行正常
+         */
+//        System.out.println("modifiersField:" + field1.get(test));
+//        System.out.println("modifiersField:" + field2.getInt(test));
 
         //  用按位取反 ~ 再按位与，~ 操作把 final 从修饰集中剔除掉，其他特性如 private, static 保持不变。
         modifiersField.setInt(field1, field1.getModifiers() & ~Modifier.FINAL);
         modifiersField.setInt(field2, field2.getModifiers() & ~Modifier.FINAL);
-        System.out.println("field1:" + Modifier.toString(field1.getModifiers()));
-//        System.out.println("modifiersField:" + field2.getInt(null)); // final获取后后不能设置
+        System.out.println("=====修改后=====");
         field1.set(test, 200);
-        // 注意：修改final 基本类型与String类型常量时，在编译时其值已经被替换，所有通过反射修改不起作用
         field2.set(test, 300);
-        System.out.println("INTEGER_VALUE:" + INTEGER_VALUE);
         /*
-         * 对于基本类型的静态常量，JAVA在编译的时候就会把代码中对此常量中引用的地方替换成相应常量值。
+         * 注意：
+         * 1、修改final 基本类型与String类型常量时，在编译时其值已经被替换，所有通过反射修改不起作用
+         * 2、对于基本类型的静态常量，JAVA在编译的时候就会把代码中对此常量中引用的地方替换成相应常量值。
          * 编译时会被优化成下面这样：System.out.println(100);
          */
-        System.out.println("INT_VALUE:" + INT_VALUE);
-
+        System.out.println("INTEGER_VALUE:" + test.INTEGER_VALUE);
+        System.out.println("INT_VALUE:" + test.INT_VALUE);
     }
 
     private static void testInner() throws Exception {

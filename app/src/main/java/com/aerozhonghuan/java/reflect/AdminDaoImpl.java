@@ -6,7 +6,7 @@ package com.aerozhonghuan.java.reflect;
 
 public class AdminDaoImpl extends Admin implements AdminDao {
 
-    private String name;
+    private String name = "test";
     public int age;
 
 
