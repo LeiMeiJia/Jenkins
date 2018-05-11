@@ -38,7 +38,7 @@ public class ReflectTest {
         // AdminDao.class;
         // adminDao.getClass();
         // Class.forName("com.aerozhonghuan.java.reflect.AdminDaoImpl"); // 优先考虑
-        // ClassLoader.getSystemClassLoader().loadClass("com.aerozhonghuan.java.reflect.AdminDaoImpl");
+         ClassLoader.getSystemClassLoader().loadClass("com.aerozhonghuan.java.reflect.AdminDaoImpl");
         Class clazz = Class.forName("com.aerozhonghuan.java.reflect.AdminDaoImpl");
 
         // 2、获取成员变量
@@ -117,7 +117,7 @@ public class ReflectTest {
         Method func = clazz.getDeclaredMethod("func1", String[].class);
         func.setAccessible(true);
         // 注意：可变参数，这个变量其实是数组，它会自动把多个参数组装成一个数组
-        func.invoke(test, new String[1]);// 运行正常：null
+        func.invoke(test, new String[1]);// 运行正常：null，将可变参数拆解，长度为1，但是没有元素，所以null
         func.invoke(test, (Object) new String[]{"a", "b"}); // 运行正常：2
         func.invoke(test, new Object[]{new String[]{"a", "b", "c"}}); // 运行正常：3
 //        func.invoke(test, new String[]{"a"}); // 报错：将可变参数拆解后，入参为String-->a，与func1入参String[]类型不符合
@@ -202,32 +202,66 @@ public class ReflectTest {
         System.out.println("INT_VALUE:" + test.INT_VALUE);
     }
 
-    private static void testInner() throws Exception {
-        ReflectTest test = new ReflectTest();
-        Class clazz = test.getClass();
-        Class[] declaredClasses = clazz.getDeclaredClasses();
-        for (Class cls : declaredClasses) {
-            int modifiers = cls.getModifiers();
+    // ============== 3、通过反射获取内部类============
+    public static void testInner() throws Exception {
+        Class outerClazz = ReflectTest.class;
+        // 调用外部类方法
+        Method outerMethod = outerClazz.getDeclaredMethod("outer");
+        outerMethod.invoke(outerClazz.newInstance());
+        // 调用内部类方法
+        Class[] innerClazzs = outerClazz.getDeclaredClasses();
+        for (Class innerClazz : innerClazzs) {
+            int modifiers = innerClazz.getModifiers();
             String name = Modifier.toString(modifiers);
             if (name.contains("static")) {
-                Object instance = cls.newInstance();
+                // 静态内部类不持有外部类的引用，所以构造函数不需要入参外部类
+                Constructor constructor = innerClazz.getDeclaredConstructor(String.class);
+                Method innerB = innerClazz.getDeclaredMethod("innerB");
+                innerB.invoke(constructor.newInstance("innerB"));
+            } else {
+                // 成员内部类持有外部类的引用，构造函数需要入参外部类引用
+                Constructor constructor = innerClazz.getDeclaredConstructor(outerClazz, String.class);
+                Method innerA = innerClazz.getDeclaredMethod("innerA");
+                innerA.invoke(constructor.newInstance(outerClazz.newInstance(), "innerA"));
             }
         }
-
+        // 调用匿名内部类
+        Field r = outerClazz.getDeclaredField("r");
+        Runnable runnable = (java.lang.Runnable) r.get(outerClazz.newInstance());
+        runnable.run();
     }
 
 
+    public void outer() {
+        System.out.println("Outer class");
+    }
+
     private class InnerA {
-        public InnerA() {
+        private String name;
+
+        public InnerA(String name) {
+            InnerA.this.name = name;
+        }
+
+        public void innerA() {
+            System.out.println(name + " class");
         }
     }
 
     private static class InnerB {
-        public InnerB() {
+        private String name;
+
+        public InnerB(String name) {
+            InnerB.this.name = name;
+        }
+
+        public void innerB() {
+            System.out.println(name + " class");
         }
     }
 
-    private Runnable r = new Runnable() {
+    // 匿名内部类中是不能定义构造函数的，能存在任何的静态成员变量和静态方法。
+    private Runnable r = new Thread() {
         @Override
         public void run() {
             System.out.println("Method run of Runnable r");
