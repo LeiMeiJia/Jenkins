@@ -38,7 +38,7 @@ public class ReflectTest {
         // AdminDao.class;
         // adminDao.getClass();
         // Class.forName("com.aerozhonghuan.java.reflect.AdminDaoImpl"); // 优先考虑
-         ClassLoader.getSystemClassLoader().loadClass("com.aerozhonghuan.java.reflect.AdminDaoImpl");
+        ClassLoader.getSystemClassLoader().loadClass("com.aerozhonghuan.java.reflect.AdminDaoImpl");
         Class clazz = Class.forName("com.aerozhonghuan.java.reflect.AdminDaoImpl");
 
         // 2、获取成员变量
@@ -117,7 +117,7 @@ public class ReflectTest {
         Method func = clazz.getDeclaredMethod("func1", String[].class);
         func.setAccessible(true);
         // 注意：可变参数，这个变量其实是数组，它会自动把多个参数组装成一个数组
-        func.invoke(test, new String[1]);// 运行正常：null，将可变参数拆解，长度为1，但是没有元素，所以null
+        func.invoke(test,  new String[1]);// 运行正常：null，将可变参数拆解，长度为1，但是没有元素，所以null
         func.invoke(test, (Object) new String[]{"a", "b"}); // 运行正常：2
         func.invoke(test, new Object[]{new String[]{"a", "b", "c"}}); // 运行正常：3
 //        func.invoke(test, new String[]{"a"}); // 报错：将可变参数拆解后，入参为String-->a，与func1入参String[]类型不符合
@@ -220,9 +220,10 @@ public class ReflectTest {
                 innerB.invoke(constructor.newInstance("innerB"));
             } else {
                 // 成员内部类持有外部类的引用，构造函数需要入参外部类引用
-                Constructor constructor = innerClazz.getDeclaredConstructor(outerClazz, String.class);
+                Constructor constructor = innerClazz.getDeclaredConstructor(outerClazz,String.class);
+                constructor.setAccessible(true); // 未显示的复写构造函数，需设置为可以获取的
                 Method innerA = innerClazz.getDeclaredMethod("innerA");
-                innerA.invoke(constructor.newInstance(outerClazz.newInstance(), "innerA"));
+                innerA.invoke(constructor.newInstance(outerClazz.newInstance(),"innerA"));
             }
         }
         // 调用匿名内部类
