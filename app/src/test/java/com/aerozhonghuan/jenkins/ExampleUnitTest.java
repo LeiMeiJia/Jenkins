@@ -1,6 +1,7 @@
 package com.aerozhonghuan.jenkins;
 
 import com.aerozhonghuan.java.annotation.AnnotationTest;
+import com.aerozhonghuan.java.reference.ReferenceDemo;
 import com.aerozhonghuan.java.reflect.ReflectTest;
 
 import org.junit.Test;
@@ -16,7 +17,10 @@ public class ExampleUnitTest {
     @Test
     public void addition_isCorrect() throws Exception {
         assertEquals(4, 2 + 2);
-        ReflectTest.testFunc1();
+//        ReflectTest.testFunc1();
+//        ReferenceDemo.softReference();
+//        ReferenceDemo.weakReference();
+        ReferenceDemo.testWeakHashMap();
     }
 
     @Test
