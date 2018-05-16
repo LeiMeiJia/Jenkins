@@ -5,6 +5,7 @@ import java.lang.ref.ReferenceQueue;
 import java.lang.ref.SoftReference;
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.WeakHashMap;
 
 /**
@@ -51,7 +52,7 @@ public class ReferenceDemo {
     }
 
 
-    // 需引用，
+    // 虚引用
     public void phantomReference() {
 
     }
@@ -82,32 +83,29 @@ public class ReferenceDemo {
     }
 
     /**
-     * https://www.sczyh30.com/posts/Java/java-hashcode-equal/
-     *
      * HashMap：gc后，元素依然存在
      * WeakHashMap：gc后，元素不存在，使用场景
      */
     public static void testWeakHashMap() {
-        WeakHashMap<StringBuffer, String> weakHashMap = new WeakHashMap<>();
-
+        Map<StringBuffer, String> weakHashMap = new WeakHashMap<>();
+        Map<StringBuffer, String> hashMap = new HashMap<>();
         StringBuffer str1 = new StringBuffer("hello");
-        StringBuffer str2 = new StringBuffer("world");
-        WeakReference<StringBuffer> weakReference1 = new WeakReference<>(str1);
-        WeakReference<StringBuffer> weakReference2 = new WeakReference<>(str2);
-
+        StringBuffer str2 = new StringBuffer("WeakHashMap");
+        StringBuffer s1 = new StringBuffer("hello");
+        StringBuffer s2 = new StringBuffer("HashMap");
         weakHashMap.put(str1, "test1");
         weakHashMap.put(str2, "test2");
-
+        hashMap.put(s1, "test2");
+        hashMap.put(s2, "test2");
         System.out.println("weakHashMap:" + weakHashMap);
-
+        System.out.println("hashMap:" + hashMap);
         str1 = null;
         str2 = null;
-
+        s1 = null;
+        s2= null;
         System.gc();
         System.out.println("weakHashMap:" + weakHashMap);
-        System.out.println("weakHashMap:" + weakHashMap.toString());
-
-
+        System.out.println("hashMap:" + hashMap);
     }
 
     // 软引用使用方法

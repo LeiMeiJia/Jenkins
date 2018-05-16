@@ -1,6 +1,7 @@
 package com.aerozhonghuan.jenkins;
 
 import com.aerozhonghuan.java.annotation.AnnotationTest;
+import com.aerozhonghuan.java.reference.EqualsDemo;
 import com.aerozhonghuan.java.reference.ReferenceDemo;
 import com.aerozhonghuan.java.reflect.ReflectTest;
 
@@ -21,6 +22,8 @@ public class ExampleUnitTest {
 //        ReferenceDemo.softReference();
 //        ReferenceDemo.weakReference();
         ReferenceDemo.testWeakHashMap();
+//        EqualsDemo.equalsHashSet();
+//        EqualsDemo.equalsHashMap();
     }
 
     @Test
