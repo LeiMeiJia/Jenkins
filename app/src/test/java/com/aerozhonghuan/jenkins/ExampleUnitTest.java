@@ -1,6 +1,7 @@
 package com.aerozhonghuan.jenkins;
 
 import com.aerozhonghuan.java.annotation.AnnotationTest;
+import com.aerozhonghuan.java.collections.HashSetDemo;
 import com.aerozhonghuan.java.reference.EqualsDemo;
 import com.aerozhonghuan.java.reference.ReferenceDemo;
 import com.aerozhonghuan.java.reflect.ReflectTest;
@@ -21,9 +22,11 @@ public class ExampleUnitTest {
 //        ReflectTest.testFunc1();
 //        ReferenceDemo.softReference();
 //        ReferenceDemo.weakReference();
-        ReferenceDemo.testWeakHashMap();
+//        ReferenceDemo.testWeakHashMap();
 //        EqualsDemo.equalsHashSet();
-//        EqualsDemo.equalsHashMap();
+        EqualsDemo.equalsHashMap();
+        HashSetDemo demo = new HashSetDemo();
+        demo.testHashSet();
     }
 
     @Test
