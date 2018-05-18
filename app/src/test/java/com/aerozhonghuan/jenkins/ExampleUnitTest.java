@@ -24,9 +24,15 @@ public class ExampleUnitTest {
 //        ReferenceDemo.weakReference();
 //        ReferenceDemo.testWeakHashMap();
 //        EqualsDemo.equalsHashSet();
-        EqualsDemo.equalsHashMap();
+//        EqualsDemo.equalsHashMap();
         HashSetDemo demo = new HashSetDemo();
         demo.testHashSet();
+        int index=0;
+        String[] strs = new String[]{"0","1","2"};
+        System.out.println("=============" + strs[index++]);
+        System.out.println("======index====" + index);
+        System.out.println("=============" + strs[index++]);
+        System.out.println("======index=====" + index);
     }
 
     @Test

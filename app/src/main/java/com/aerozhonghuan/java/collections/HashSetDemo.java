@@ -2,8 +2,11 @@ package com.aerozhonghuan.java.collections;
 
 import java.util.AbstractSet;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * 1、创建一个ArrayList集合，添加元素
