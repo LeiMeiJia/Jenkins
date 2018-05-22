@@ -74,7 +74,7 @@ public class ReflectTest {
         Field name = clazz.getDeclaredField("name");
         // 暴力破解
         name.setAccessible(true);
-        System.out.println("name:" + name.get(adminDao));  // 获取成员变脸默认值
+        System.out.println("name:" + name.get(adminDao));  // 获取成员变量默认值
         name.set(adminDao, "测试");
         System.out.println("adminDao:" + adminDao);
 

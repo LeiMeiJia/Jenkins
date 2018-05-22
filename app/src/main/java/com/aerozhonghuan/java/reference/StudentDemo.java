@@ -1,6 +1,7 @@
 package com.aerozhonghuan.java.reference;
 
 /**
+ * 注意：hashcode()方法的重写规则
  * Created by Administrator on 2018/5/16.
  */
 

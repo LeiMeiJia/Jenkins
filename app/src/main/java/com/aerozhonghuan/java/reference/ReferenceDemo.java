@@ -16,8 +16,6 @@ import java.util.WeakHashMap;
 
 public class ReferenceDemo {
 
-    private static final int test = 10;
-
     // 强引用，一般中断强引用和某个对象之间的关联，可以显示地将引用赋值为null
     public void strongReference() {
         Object object = new Object();
@@ -102,7 +100,7 @@ public class ReferenceDemo {
         str1 = null;
         str2 = null;
         s1 = null;
-        s2= null;
+        s2 = null;
         System.gc();
         System.out.println("weakHashMap:" + weakHashMap);
         System.out.println("hashMap:" + hashMap);
