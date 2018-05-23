@@ -60,8 +60,8 @@ public class ReferenceDemo {
         String str2 = new String("world");
         ReferenceQueue<String> queue = new ReferenceQueue<>();
         SoftReference<String> softReference = new SoftReference<>(str1, queue);
-        WeakReference<String> weakReference = new WeakReference<>(str2);
-//        WeakReference<String> weakReference = new WeakReference<>(str2,queue);
+        WeakReference<String> weakReference = new WeakReference<>(str2,queue);
+//        WeakReference<String> weakReference = new WeakReference<>(str2);
         str1 = null;
         str2 = null;
         /*
@@ -72,8 +72,8 @@ public class ReferenceDemo {
         Reference<? extends String> reference = queue.poll();
         if (reference != null) {
             System.out.println("gc后，weakReference:" + reference);
-            System.out.println("gc后，weakReference:" + queue.poll());
-            System.out.println("gc后，reference:" + reference.get());
+            System.out.println("gc后，reference:" + queue.poll());
+            System.out.println("gc后，str2:" + reference.get());
         } else {
             System.out.println("gc后，str1:" + softReference.get());
             System.out.println("gc后，str2:" + weakReference.get());
