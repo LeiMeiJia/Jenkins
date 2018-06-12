@@ -2,6 +2,7 @@ package com.aerozhonghuan.jenkins;
 
 import com.aerozhonghuan.java.annotation.AnnotationTest;
 import com.aerozhonghuan.java.collections.HashSetDemo;
+import com.aerozhonghuan.java.reference.EqualsDemo;
 import com.aerozhonghuan.java.reference.ReferenceDemo;
 import com.aerozhonghuan.java.reflect.ReflectTest;
 
@@ -18,11 +19,11 @@ public class ExampleUnitTest {
     @Test
     public void addition_isCorrect() throws Exception {
         assertEquals(4, 2 + 2);
-        ReflectTest.testInner();
+//        ReflectTest.testInner();
 //        ReferenceDemo.softReference();
 //        ReferenceDemo.weakReference();
 //        ReferenceDemo.testWeakHashMap();
-        ReferenceDemo.testReference();
+//        ReferenceDemo.testReference();
 //        EqualsDemo.equalsHashSet();
 //        EqualsDemo.equalsHashMap();
         HashSetDemo demo = new HashSetDemo();
@@ -32,6 +33,7 @@ public class ExampleUnitTest {
     @Test
     public void test() throws Exception {
         ReflectTest.reflect();
+        ReflectTest.testFinal();
         System.out.println("=============");
         AnnotationTest.annotation();
     }

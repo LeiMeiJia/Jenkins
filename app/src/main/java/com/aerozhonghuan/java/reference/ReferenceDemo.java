@@ -60,7 +60,7 @@ public class ReferenceDemo {
         String str2 = new String("world");
         ReferenceQueue<String> queue = new ReferenceQueue<>();
         SoftReference<String> softReference = new SoftReference<>(str1, queue);
-        WeakReference<String> weakReference = new WeakReference<>(str2,queue);
+        WeakReference<String> weakReference = new WeakReference<>(str2, queue);
 //        WeakReference<String> weakReference = new WeakReference<>(str2);
         str1 = null;
         str2 = null;
@@ -69,10 +69,9 @@ public class ReferenceDemo {
          * 2、softReference 引用不受gc机制的影响，只有在内存不足时所指向的对象才会被回收。
          */
         System.gc();
-        Reference<? extends String> reference = queue.poll();
+        Reference<? extends String> reference = queue.poll(); // ReferenceQueue 只存在 WeakReference 引用
         if (reference != null) {
             System.out.println("gc后，weakReference:" + reference);
-            System.out.println("gc后，reference:" + queue.poll());
             System.out.println("gc后，str2:" + reference.get());
         } else {
             System.out.println("gc后，str1:" + softReference.get());

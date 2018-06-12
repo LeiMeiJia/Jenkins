@@ -198,32 +198,44 @@ public class ReflectTest {
          * 2、对于基本类型的静态常量，JAVA在编译的时候就会把代码中对此常量中引用的地方替换成相应常量值。
          * 编译时会被优化成下面这样：System.out.println(100);
          */
-        System.out.println("INTEGER_VALUE:" + test.INTEGER_VALUE);
-        System.out.println("INT_VALUE:" + test.INT_VALUE);
+        System.out.println("INTEGER_VALUE:" + test.INTEGER_VALUE); // 200
+        System.out.println("INT_VALUE:" + test.INT_VALUE); // 100
     }
 
     // ============== 3、通过反射获取内部类============
     public static void testInner() throws Exception {
         Class outerClazz = ReflectTest.class;
+        Object outer = outerClazz.newInstance();
         // 调用外部类方法
         Method outerMethod = outerClazz.getDeclaredMethod("outer");
-        outerMethod.invoke(outerClazz.newInstance());
+        outerMethod.invoke(outer);
         // 调用内部类方法
         Class[] innerClazzs = outerClazz.getDeclaredClasses();
         for (Class innerClazz : innerClazzs) {
-            int modifiers = innerClazz.getModifiers();
-            String name = Modifier.toString(modifiers);
-            if (name.contains("static")) {
-                // 静态内部类不持有外部类的引用，所以构造函数不需要入参外部类
-                Constructor constructor = innerClazz.getDeclaredConstructor(String.class);
-                Method innerB = innerClazz.getDeclaredMethod("innerB");
-                innerB.invoke(constructor.newInstance("innerB"));
-            } else {
-                // 成员内部类持有外部类的引用，构造函数需要入参外部类引用
-                Constructor constructor = innerClazz.getDeclaredConstructor(outerClazz, String.class);
-//                constructor.setAccessible(true); // 未显式复写构造函数，需设置为可以获取的
-                Method innerA = innerClazz.getDeclaredMethod("innerA");
-                innerA.invoke(constructor.newInstance(outerClazz.newInstance(), "innerA"));
+//            int modifiers = innerClazz.getModifiers();
+//            String name = Modifier.toString(modifiers);
+            String className = innerClazz.getSimpleName();
+            switch (className) {
+                case "InnerA":
+                    // 成员内部类持有外部类的引用，构造函数需要入参外部类引用
+                    Constructor constructorA = innerClazz.getDeclaredConstructor(outerClazz, String.class);
+                    Method innerA = innerClazz.getDeclaredMethod("innerA");
+                    innerA.invoke(constructorA.newInstance(outer, "innerA"));
+                    break;
+                case "InnerB":
+                    // 静态内部类不持有外部类的引用，所以构造函数不需要入参外部类
+                    Constructor constructorB = innerClazz.getDeclaredConstructor(String.class);
+                    Method innerB = innerClazz.getDeclaredMethod("innerB");
+                    innerB.invoke(constructorB.newInstance("innerB"));
+                    break;
+                case "InnerC":
+                    Constructor constructorC = innerClazz.getDeclaredConstructor(outerClazz);
+                    constructorC.setAccessible(true); // 未显式复写构造函数，需设置为可以获取的
+                    Method innerC = innerClazz.getDeclaredMethod("innerC");
+                    innerC.invoke(constructorC.newInstance(outer));
+                    break;
+                default:
+                    break;
             }
         }
         // 调用匿名内部类
@@ -258,6 +270,12 @@ public class ReflectTest {
 
         public void innerB() {
             System.out.println(name + " class");
+        }
+    }
+
+    private class InnerC {
+        public void innerC() {
+            System.out.println("InnerC class");
         }
     }
 

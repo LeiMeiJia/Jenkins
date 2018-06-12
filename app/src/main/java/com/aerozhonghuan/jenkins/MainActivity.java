@@ -2,13 +2,16 @@ package com.aerozhonghuan.jenkins;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Toast;
 
 import com.aerozhonghuan.demo.Demo1Activity;
 import com.aerozhonghuan.java.thread.ThreadDemo;
 import com.aerozhonghuan.java.viewutils.ViewInjectUtils;
 import com.aerozhonghuan.mytools.utils.LogUtils;
+import com.aerozhonghuan.mytools.utils.ToastUtils;
 
 /**
  * 1、注意：Toast的创建需要依赖Handler，存在handler的话，子线程也可以弹出toast
@@ -36,6 +39,15 @@ public class MainActivity extends AppCompatActivity {
         }
 
         ThreadDemo.testTask();
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Looper.prepare();
+                ToastUtils.getToast(getApplicationContext(),"测试");
+                Looper.loop();
+            }
+        }).start();
     }
 
     @Override
