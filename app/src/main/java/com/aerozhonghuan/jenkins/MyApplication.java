@@ -3,8 +3,6 @@ package com.aerozhonghuan.jenkins;
 import android.app.Application;
 import android.os.Environment;
 
-import com.squareup.leakcanary.LeakCanary;
-
 import java.io.File;
 
 /**
@@ -19,7 +17,7 @@ public class MyApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        LeakCanary.install(this);
+//        LeakCanary.install(this);
         file = new File(Environment.getExternalStorageDirectory() + "/hyStation");
         //如果文件夹不存在则创建
         if (!file.exists() && !file.isDirectory()) {
