@@ -64,8 +64,13 @@ def getGitCommitCount() {
  * 获取Jenkins 上配置的服务器地址
  * @return
  */
-def getServerUrl() {
-    def var = System.getenv("SERVER_URL")
+def getHyUrl() {
+    def var = System.getenv("HY_URL")
+    return var
+}
+
+def getFawUrl() {
+    def var = System.getenv("FAW_URL")
     return var
 }
 
@@ -90,7 +95,8 @@ ext {
     gitSHA = getGitSHA()
     gitTag = getGitTag()
     gitCommitCount = getGitCommitCount()
-    serverUrl = getServerUrl()
+    hyURL = getHyUrl()
+    fawURL = getFawUrl()
     buildType = getBuildType()
 }
 
@@ -103,6 +109,5 @@ println "#获取Jenkins Git分支 is ${gitBranch}"
 println "#获取Git 版本号 is ${gitSHA}"
 println "#获取Git Tag is ${gitTag}"
 println "#获取Git 提交次数 is ${gitCommitCount}"
-println "#获取Jenkins上配置的服务器地址 is ${serverUrl}"
 println "#获取buildType类型 is ${buildType}"
 println '***************打印配置项**************'

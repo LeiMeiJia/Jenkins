@@ -77,7 +77,8 @@ android {
             jenkins {
                 signingConfig signingConfigs.debug
 //                applicationIdSuffix ".debug"               //配置不同的applicationId
-                buildConfigField 'String', 'SERVER_URL', "\"${serverUrl}\";"
+                buildConfigField 'String', 'HY_URL', "\"${hyURL}\";"
+                buildConfigField 'String', 'FAW_URL', "\"${fawURL}\";"
             }
         }
 
