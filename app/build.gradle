@@ -69,7 +69,7 @@ android {
             debuggable true
             signingConfig signingConfigs.debug
 //            applicationIdSuffix ".debug"               //配置不同的applicationId
-            buildConfigField 'String', 'HY_URL', "\"http://59.46.97.115:8071/\";"
+            buildConfigField 'String', 'HY_URL1', "\"http://59.46.97.115:8071/\";"
             buildConfigField 'String', 'FAW_URL', "\"http://sy.aerozhonghuan.com/test/qdfaw/api/\";"
         }
 
