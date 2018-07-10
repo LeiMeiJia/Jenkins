@@ -19,20 +19,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".mvp.TestActivity" />
         <activity android:name=".rxjava.RxJavaActivity" />
 
-        <activity android:name=".Test1Activity" />
-        <activity android:name=".Test2Activity" />
-        <activity android:name=".Test3Activity" />
+        <activity android:name=".TestActivity" />
         <activity android:name=".receiver.LocalBroadcastActivity" />
         <activity android:name=".service.TestServiceActivity" />
         <activity android:name=".service.HanderThreadActivity" />
-        <activity android:name="com.aerozhonghuan.demo.Demo1Activity"/>
-        <activity android:name="com.aerozhonghuan.demo.Demo2Activity"/>
+        <activity android:name="com.aerozhonghuan.demo.DemoActivity" />
 
-        <service android:name=".service.MyIntentService"/>
-        <service android:name=".service.MyService"/>
+        <service android:name=".service.MyIntentService" />
+        <service android:name=".service.MyService" />
     </application>
 
 </manifest>

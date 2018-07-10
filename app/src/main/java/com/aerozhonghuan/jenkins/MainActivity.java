@@ -5,9 +5,8 @@ import android.os.Bundle;
 import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Toast;
 
-import com.aerozhonghuan.demo.Demo1Activity;
+import com.aerozhonghuan.demo.DemoActivity;
 import com.aerozhonghuan.java.thread.ThreadDemo;
 import com.aerozhonghuan.java.viewutils.ViewInjectUtils;
 import com.aerozhonghuan.mytools.utils.LogUtils;
@@ -29,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, Demo1Activity.class);
+                Intent intent = new Intent(MainActivity.this, DemoActivity.class);
                 startActivity(intent);
             }
         });
@@ -38,16 +37,16 @@ public class MainActivity extends AppCompatActivity {
             LogUtils.logd(TAG, LogUtils.getThreadName() + savedInstanceState.getString("data"));
         }
 
-        ThreadDemo.testTask();
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Looper.prepare();
-                ToastUtils.getToast(getApplicationContext(),"测试");
-                Looper.loop();
-            }
-        }).start();
+//        ThreadDemo.testTask();
+//
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                Looper.prepare();
+//                ToastUtils.getToast(getApplicationContext(),"测试");
+//                Looper.loop();
+//            }
+//        }).start();
     }
 
     @Override
