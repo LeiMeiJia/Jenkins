@@ -53,4 +53,8 @@ public class UpdateInfoPresenterImpl implements BasePresenter.UpdateInfoPresente
         retrofitRequest.updateInfo(token, callback);
     }
 
+    @Override
+    public void cancel() {
+
+    }
 }

@@ -35,13 +35,14 @@ public class RetrofitRequest {
         return retrofitRequest;
     }
 
-    public void loginGet(NetCallback callback) {
+    public Call<ResponseBody> loginGet(NetCallback callback) {
         // 创建参数
         Map<String, Object> hashMap = retrofitParameters.loginGet();
         // 创建接口请求
         Call<ResponseBody> call = retrofitApi.loginGet(hashMap);
         // 发送请求
         httpEngine.sendHttpRequest(call, callback);
+        return call;
     }
 
     public void loginPost(NetCallback callback) {
@@ -69,6 +70,11 @@ public class RetrofitRequest {
         Call<ResponseBody> call = retrofitApi.updateInfo(hashMap);
         // 发送请求
         httpEngine.sendHttpRequest(call, callback);
+    }
+
+    // 取消请求
+    public void cancel(Call<ResponseBody> call) {
+        httpEngine.cancelHttpRequest(call);
     }
 
 }

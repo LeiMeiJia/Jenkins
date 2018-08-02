@@ -84,4 +84,11 @@ public class HttpEngine {
         call.enqueue(callAdapter);
     }
 
+    // 取消网络请求
+    public void cancelHttpRequest(Call<ResponseBody> call) {
+        if (call != null) {
+            call.cancel();
+        }
+    }
+
 }

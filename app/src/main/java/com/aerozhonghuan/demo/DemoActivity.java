@@ -13,11 +13,13 @@ import com.aerozhonghuan.demo.mvp.presenter.LoginPresenterImpl;
 import com.aerozhonghuan.demo.mvp.presenter.UpdateInfoPresenterImpl;
 import com.aerozhonghuan.jenkins.R;
 import com.aerozhonghuan.mytools.utils.LogUtils;
+import com.aerozhonghuan.mytools.utils.ToastUtils;
 
 public class DemoActivity extends AppCompatActivity {
 
     private final static String TAG = "Demo1Activity";
     private UserInfo mUserInfo;
+    private BasePresenter.LoginPresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,7 +27,7 @@ public class DemoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_demo);
 
         // 获取登录信息
-        BasePresenter.LoginPresenter presenter = new LoginPresenterImpl(new BaseResult.LoginResult() {
+        presenter = new LoginPresenterImpl(new BaseResult.LoginResult() {
             @Override
             public void onLoginSuccess(UserInfo userInfo) {
                 LogUtils.logd(TAG, "userInfo:" + userInfo);
@@ -34,6 +36,7 @@ public class DemoActivity extends AppCompatActivity {
 
             @Override
             public void onLoginFail(int resultCode, String errorMsg) {
+                ToastUtils.getToast(DemoActivity.this, errorMsg);
                 LogUtils.logd(TAG, "resultCode:" + resultCode + " message:" + errorMsg);
             }
         });
@@ -53,6 +56,7 @@ public class DemoActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         LogUtils.logd(TAG, ">>>>>>>>>");
+        presenter.cancel();
     }
 
     private void getCars(String token) {
@@ -84,5 +88,6 @@ public class DemoActivity extends AppCompatActivity {
         });
         presenter.updateInfo(token);
     }
+
 
 }

@@ -54,4 +54,8 @@ public class CarListPresenterImpl implements BasePresenter.CarListPresenter {
         retrofitRequest.getCars(token, callback);
     }
 
+    @Override
+    public void cancel() {
+
+    }
 }

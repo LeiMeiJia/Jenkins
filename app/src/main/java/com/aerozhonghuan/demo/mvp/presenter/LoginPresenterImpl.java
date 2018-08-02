@@ -1,17 +1,22 @@
 package com.aerozhonghuan.demo.mvp.presenter;
 
+import android.os.AsyncTask;
+
 import com.aerozhonghuan.demo.mvp.BasePresenter;
 import com.aerozhonghuan.demo.mvp.BaseResult;
 import com.aerozhonghuan.demo.mvp.entity.UserInfo;
 import com.aerozhonghuan.demo.mvp.model.ApiResponse;
+import com.aerozhonghuan.demo.mvp.model.NetCallAdapter;
 import com.aerozhonghuan.demo.mvp.model.ResponseCallback;
 import com.aerozhonghuan.demo.mvp.model.http.HttpRequest;
-import com.aerozhonghuan.demo.mvp.model.NetCallAdapter;
 import com.aerozhonghuan.demo.mvp.model.retrofit.RetrofitRequest;
 import com.aerozhonghuan.demo.net.callback.NetCallback;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
 
 /**
  * Created by Administrator on 2018/2/1.
@@ -22,6 +27,8 @@ public class LoginPresenterImpl implements BasePresenter.LoginPresenter {
     private HttpRequest httpRequest;
     private RetrofitRequest retrofitRequest;
     private BaseResult.LoginResult result;
+    private Call<ResponseBody> call;
+    private AsyncTask task;
 
     public LoginPresenterImpl(BaseResult.LoginResult result) {
         httpRequest = HttpRequest.getInstance();
@@ -40,6 +47,7 @@ public class LoginPresenterImpl implements BasePresenter.LoginPresenter {
             @Override
             public void onSuccess(UserInfo userInfo) {
                 result.onLoginSuccess(userInfo);
+
             }
 
             @Override
@@ -48,8 +56,14 @@ public class LoginPresenterImpl implements BasePresenter.LoginPresenter {
             }
         });
         // 调用网络层
-        httpRequest.loginGet(callback);
-//        retrofitRequest.loginGet(callback);
+        task = httpRequest.loginGet(callback);
+//        call = retrofitRequest.loginGet(callback);
     }
 
+
+    @Override
+    public void cancel() {
+        httpRequest.cancel(task);
+//        retrofitRequest.cancel(call);
+    }
 }

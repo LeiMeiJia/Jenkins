@@ -1,5 +1,7 @@
 package com.aerozhonghuan.demo.mvp.model.http;
 
+import android.os.AsyncTask;
+
 import com.aerozhonghuan.demo.mvp.Configuration;
 import com.aerozhonghuan.demo.net.callback.NetCallback;
 import com.aerozhonghuan.demo.net.http.task.MyAsyncGetTask;
@@ -33,7 +35,7 @@ public class HttpRequest {
         return httpRequest;
     }
 
-    public void loginGet(NetCallback callback) {
+    public AsyncTask loginGet(NetCallback callback) {
         // 创建参数
         String url = Configuration.fawLogin;
         Map<String, Object> hashMap = httpParameters.loginGet();
@@ -41,6 +43,7 @@ public class HttpRequest {
         MyAsyncGetTask task = new MyAsyncGetTask(url, hashMap, callback);
         // 发送请求
         task.executeOnExecutor(executor);
+        return task;
     }
 
     public void loginPost(NetCallback callback) {
@@ -53,7 +56,7 @@ public class HttpRequest {
         task.executeOnExecutor(executor);
     }
 
-    public void getCars(String token,NetCallback callback) {
+    public void getCars(String token, NetCallback callback) {
         // 创建参数
         String url = Configuration.carPageList;
         Map<String, Object> hashMap = httpParameters.getCars(token);
@@ -63,7 +66,7 @@ public class HttpRequest {
         task.executeOnExecutor(executor);
     }
 
-    public void updateInfo(String token,NetCallback callback) {
+    public void updateInfo(String token, NetCallback callback) {
         // 创建参数
         String url = Configuration.updateUserInfo;
         Map<String, Object> hashMap = httpParameters.updateInfo(token);
@@ -71,6 +74,13 @@ public class HttpRequest {
         MyAsyncPostTask task = new MyAsyncPostTask(url, hashMap, callback);
         // 发送请求
         task.executeOnExecutor(executor);
+    }
+
+    // 取消请求
+    public void cancel(AsyncTask task) {
+        if (task != null) {
+            task.cancel(true);
+        }
     }
 
 }
