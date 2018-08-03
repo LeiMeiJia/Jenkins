@@ -1,7 +1,6 @@
 package com.aerozhonghuan.demo;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.aerozhonghuan.demo.mvp.BasePresenter;
@@ -15,11 +14,12 @@ import com.aerozhonghuan.jenkins.R;
 import com.aerozhonghuan.mytools.utils.LogUtils;
 import com.aerozhonghuan.mytools.utils.ToastUtils;
 
-public class DemoActivity extends AppCompatActivity {
+public class DemoActivity extends BaseActivity {
 
-    private final static String TAG = "Demo1Activity";
+    private final static String TAG = "DemoActivity";
     private UserInfo mUserInfo;
-    private BasePresenter.LoginPresenter presenter;
+    private BasePresenter.LoginPresenter loginPresenter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +27,7 @@ public class DemoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_demo);
 
         // 获取登录信息
-        presenter = new LoginPresenterImpl(new BaseResult.LoginResult() {
+        loginPresenter = new LoginPresenterImpl(new BaseResult.LoginResult() {
             @Override
             public void onLoginSuccess(UserInfo userInfo) {
                 LogUtils.logd(TAG, "userInfo:" + userInfo);
@@ -40,7 +40,7 @@ public class DemoActivity extends AppCompatActivity {
                 LogUtils.logd(TAG, "resultCode:" + resultCode + " message:" + errorMsg);
             }
         });
-        presenter.login();
+        loginPresenter.login();
 
         findViewById(R.id.btn).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -49,14 +49,6 @@ public class DemoActivity extends AppCompatActivity {
                 update(mUserInfo.getToken());
             }
         });
-    }
-
-    // 退出页面时，取消请求回调
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        LogUtils.logd(TAG, ">>>>>>>>>");
-        presenter.cancel();
     }
 
     private void getCars(String token) {
@@ -90,4 +82,8 @@ public class DemoActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    protected BasePresenter bindPresenter() {
+        return loginPresenter;
+    }
 }

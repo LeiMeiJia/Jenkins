@@ -55,7 +55,7 @@ public class CarListPresenterImpl implements BasePresenter.CarListPresenter {
     }
 
     @Override
-    public void cancel() {
+    public void onDestroy() {
 
     }
 }

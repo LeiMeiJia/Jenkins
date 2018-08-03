@@ -54,7 +54,7 @@ public class UpdateInfoPresenterImpl implements BasePresenter.UpdateInfoPresente
     }
 
     @Override
-    public void cancel() {
+    public void onDestroy() {
 
     }
 }

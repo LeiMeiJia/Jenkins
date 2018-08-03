@@ -11,12 +11,15 @@ import com.aerozhonghuan.demo.mvp.model.ResponseCallback;
 import com.aerozhonghuan.demo.mvp.model.http.HttpRequest;
 import com.aerozhonghuan.demo.mvp.model.retrofit.RetrofitRequest;
 import com.aerozhonghuan.demo.net.callback.NetCallback;
+import com.aerozhonghuan.mytools.utils.LogUtils;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
+
+import static android.support.v7.widget.StaggeredGridLayoutManager.TAG;
 
 /**
  * Created by Administrator on 2018/2/1.
@@ -46,24 +49,36 @@ public class LoginPresenterImpl implements BasePresenter.LoginPresenter {
         NetCallback callback = new NetCallAdapter(typeToken, new ResponseCallback<UserInfo>() {
             @Override
             public void onSuccess(UserInfo userInfo) {
-                result.onLoginSuccess(userInfo);
-
+                if (result == null) {
+                    LogUtils.logd(TAG, LogUtils.getThreadName() + "页面销毁");
+                } else {
+                    result.onLoginSuccess(userInfo); // 页面正常时回调
+                }
             }
 
             @Override
             public void onFail(int resultCode, String errorMsg) {
-                result.onLoginFail(resultCode, errorMsg);
+                if (result == null) {
+                    LogUtils.logd(TAG, LogUtils.getThreadName() + "页面销毁");
+                } else {
+                    result.onLoginFail(resultCode, errorMsg);
+                }
             }
         });
         // 调用网络层
-        task = httpRequest.loginGet(callback);
-//        call = retrofitRequest.loginGet(callback);
+//        task = httpRequest.loginGet(callback);
+        call = retrofitRequest.loginGet(callback);
     }
 
 
     @Override
-    public void cancel() {
-        httpRequest.cancel(task);
-//        retrofitRequest.cancel(call);
+    public void onDestroy() {
+//        httpRequest.cancel(task);
+        // 取消网络请求
+        retrofitRequest.cancel(call);
+        // 中断View层强引用
+        result = null;
+        System.gc();
     }
+
 }

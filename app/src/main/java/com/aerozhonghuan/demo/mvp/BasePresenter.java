@@ -20,6 +20,6 @@ public interface BasePresenter {
         void updateInfo(String token);
     }
 
-    void cancel();
+    void onDestroy();
 
 }
