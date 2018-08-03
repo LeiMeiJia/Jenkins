@@ -36,7 +36,7 @@ public class DemoActivity extends BaseActivity {
 
             @Override
             public void onLoginFail(int resultCode, String errorMsg) {
-                ToastUtils.getToast(DemoActivity.this, errorMsg);
+                ToastUtils.getToast(getApplicationContext(), errorMsg);
                 LogUtils.logd(TAG, "resultCode:" + resultCode + " message:" + errorMsg);
             }
         });
